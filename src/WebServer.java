@@ -1,13 +1,11 @@
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class WebServer {
 
   public static void main( String[] args ) {
     MimeTypes mimesFile = new MimeTypes( "conf/mime.types" );
     mimesFile.load();
+    System.out.println( mimesFile.lookup( "ai" ) );
 
-//      StringTokenizer tokens = new StringTokenizer( "application/pdf   pdf" );
-//      tokens.nextToken();
-//      System.out.println( tokens.nextToken() );
   }
 }

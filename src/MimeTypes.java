@@ -1,52 +1,58 @@
 import java.util.*;
 
-public class MimeTypes extends ConfigurationReader{
+public class MimeTypes extends ConfigurationReader {
 
-  private HashMap<String,String> types;
+  private HashMap<String, String> types;
 
-  public MimeTypes(String fileName){
-    super(fileName);
+  public MimeTypes( String fileName ) {
+    super( fileName );
     this.types = new HashMap<>();
   }
 
-  public HashMap<String, String> getTypes() {
+  public HashMap<String, String> getTypes( ) {
     return this.types;
   }
 
-  public boolean startsWithHashSymbol(String stringToBeChecked){
+  public boolean startsWithAHashSymbol( String stringToBeChecked ) {
     return stringToBeChecked.startsWith( "#" );
   }
 
-  public boolean isEmptyString(String stringToBeChecked){
+  public boolean isEmptyString( String stringToBeChecked ) {
     return stringToBeChecked.equals( "" );
   }
 
-  public void skipUselessLines(){
-    while( startsWithHashSymbol( this.getCurrentLine() ) || isEmptyString( this.getCurrentLine() )){
+  public void skipUselessLines( ) {
+    while ( startsWithAHashSymbol( this.getCurrentLine() ) || isEmptyString( this.getCurrentLine() ) ) {
       this.setNextLine();
     }
   }
 
-  public void load( ) {
-    StringTokenizer tokens;
+  public void tokenizeCurrentLine( ) {
+    StringTokenizer tokens = new StringTokenizer( this.getCurrentLine() );
+    String valueToken;
+    String keyToken;
 
-    while(this.hasMoreLines()){
-      this.skipUselessLines();
+    if ( tokens.countTokens() > 1 ) {
+      valueToken = tokens.nextToken();
 
-      tokens = new StringTokenizer( this.getCurrentLine() );
-      if(tokens.countTokens() > 1) {
-        String mimeType = tokens.nextToken();
-        System.out.println( mimeType );
-        tokens.nextToken();
-
-//        while( tokens.hasMoreTokens()) {
-//          System.out.println( tokens.nextToken() );
-//
-//        }
+      while ( tokens.hasMoreTokens() ) {
+        keyToken = tokens.nextToken();
+        types.put( keyToken, valueToken );
       }
+    }
 
+    this.setNextLine();
+  }
 
-      this.setNextLine(); // move to next line to check
+  public void load( ) {
+    while ( this.hasMoreLines() ) {
+      this.skipUselessLines();
+      this.tokenizeCurrentLine();
     }
   }
+
+  public String lookup(String extension){
+    return this.types.get( extension );
+  }
+
 }
