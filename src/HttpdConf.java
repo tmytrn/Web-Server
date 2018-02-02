@@ -4,4 +4,9 @@ public class HttpdConf extends ConfigurationReader{
     super(fileName);
   }
 
+  @Override
+  public void load( ) {
+
+  }
+
 }
