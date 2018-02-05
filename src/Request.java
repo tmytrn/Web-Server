@@ -88,24 +88,24 @@ public class Request {
     System.out.println( "header: " + currentHeader[0] + "   " + currentHeader[1] );
   }
 
-//  public String getUri(){
-//
-//  }
+  public String getUri(){
+    return this.uri;
+  }
 
-//  public byte[] getBody{
-//
-//  }
+  public byte[] getBody(){
+    return this.body;
+  }
 
-//  public String getVerb(){
-//
-//  }
+  public String getVerb(){
+    return this.verb;
+  }
 
-//  public String getHttpVersion(){
-//
-//  }
+  public String getHttpVersion(){
+    return this.httpVersion;
+  }
 
-//  public String lookup(String header){
-//
-//  }
+  public String lookup(String header){
+    return this.headers.get( header );
+  }
 
 }
