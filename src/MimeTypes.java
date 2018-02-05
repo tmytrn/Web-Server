@@ -51,7 +51,7 @@ public class MimeTypes extends ConfigurationReader {
     }
   }
 
-  public String lookup(String extension){
+  public String lookup( String extension ) {
     return this.types.get( extension );
   }
 
