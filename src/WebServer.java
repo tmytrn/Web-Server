@@ -26,6 +26,8 @@ public class WebServer {
         "Content-Encoding: gzip\n" +
         "Vary: Accept-Encoding, Cookie, User-Agent\n" );
 
+    Resource resource = new Resource( "public_html/index.html", configuration );
+
 //    System.out.print( "methods\n" );
 //    System.out.print( "headers\n" );
 //    System.out.print("\r\n" );
