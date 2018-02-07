@@ -6,6 +6,8 @@ public class WebServer {
     MimeTypes mimesFile = new MimeTypes( "conf/mime.types" );
     mimesFile.load();
     HttpdConf configuration = new HttpdConf( "conf/httpd.conf" );
+    configuration.load();
+    System.out.println(configuration.lookup("/ab/"));
     //    //    configuration.load();
     //    //    System.out.println(configuration.lookup("Listen"));
     //    //    //System.out.println( mimesFile.lookup( "mp3" ) );
@@ -25,6 +27,8 @@ public class WebServer {
         "X-Pingback: http://net.tutsplus.com/xmlrpc.php\n" +
         "Content-Encoding: gzip\n" +
         "Vary: Accept-Encoding, Cookie, User-Agent\n" );
+
+    Resource resource = new Resource( "/ab1/ab2/index.html", configuration );
 
 //    System.out.print( "methods\n" );
 //    System.out.print( "headers\n" );
