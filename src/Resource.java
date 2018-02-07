@@ -1,9 +1,8 @@
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 
 public class Resource {
-  private byte[] byteFile;
+  private byte[] byteArray;
   HttpdConf configuration;
   String fileURI;
 
@@ -14,25 +13,27 @@ public class Resource {
     try {
       File document = new File( absolutePath() );
       FileInputStream fileReader = new FileInputStream( document);
-      byteFile = new byte[(int)document.length()];
-      fileReader.read(byteFile);
-      System.out.println(new String(byteFile));
+      byteArray = new byte[(int)document.length()];
+      fileReader.read(byteArray);
+      System.out.println(new String(byteArray));
       fileReader.close();
     }
     catch (Exception e){
-      e.printStackTrace();
+      //File document = new File(configuration.lookup("DirectoryIndex"));
+      //e.printStackTrace();
       //404 error
     }
-    absolutePath();
+
+
   }
 
   public String absolutePath(){
-
     if(configuration.lookup( fileURI ) != null){
         return configuration.lookup( fileURI );
     }
-    return fileURI;
-    //return "";
+    else {
+        return configuration.lookup("DocumentRoot") + fileURI;
+    }
   }
 
   public boolean isScript(){
