@@ -15,32 +15,54 @@ public class Resource {
       FileInputStream fileReader = new FileInputStream( document);
       byteArray = new byte[(int)document.length()];
       fileReader.read(byteArray);
+      System.out.println("does ht access exist: " +isProtected());
       System.out.println(new String(byteArray));
       fileReader.close();
     }
     catch (Exception e){
-      //File document = new File(configuration.lookup("DirectoryIndex"));
-      //e.printStackTrace();
-      //404 error
+      e.printStackTrace();
+      //500 error
     }
-
 
   }
 
   public String absolutePath(){
-    if(configuration.lookup( fileURI ) != null){
-        return configuration.lookup( fileURI );
+    if(isAliased( fileURI )){
+      fileURI = configuration.lookupAlias( fileURI );
     }
-    else {
-        return configuration.lookup("DocumentRoot") + fileURI;
+    else if(isScript(fileURI)){
+      fileURI = configuration.lookupScript( fileURI );
+    }
+    else{
+      fileURI = appendDocumentRoot( fileURI );
+    }
+    if(isFile( fileURI )){
+      return fileURI;
+    }
+    else{
+      return fileURI + configuration.lookup( "DirectoryIndex" );
     }
   }
+  public boolean isFile(String uri){
+    File fileCheck = new File( uri);
+    return fileCheck.isFile();
+  }
+  public boolean isAliased(String uri){
+    return (configuration.lookupAlias( uri ) != null);
 
-  public boolean isScript(){
-    return false;
+  }
+
+  public String appendDocumentRoot(String uri){
+    return configuration.lookup( "DocumentRoot" ) + fileURI ;
+  }
+
+  public boolean isScript(String uri){
+    return (configuration.lookupScript( uri ) != null);
   }
 
   public boolean isProtected(){
-    return false;
+    File htAccess = new File("public_html .htaccess");
+    return (htAccess.exists());
   }
+
 }
