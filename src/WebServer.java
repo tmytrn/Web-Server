@@ -7,7 +7,7 @@ public class WebServer {
     mimesFile.load();
     HttpdConf configuration = new HttpdConf( "conf/httpd.conf" );
     configuration.load();
-    System.out.println(configuration.lookup("/ab/"));
+    System.out.println(configuration.lookup("/"));
     //    //    configuration.load();
     //    //    System.out.println(configuration.lookup("Listen"));
     //    //    //System.out.println( mimesFile.lookup( "mp3" ) );
@@ -28,7 +28,7 @@ public class WebServer {
         "Content-Encoding: gzip\n" +
         "Vary: Accept-Encoding, Cookie, User-Agent\n" );
 
-    Resource resource = new Resource( "/ab1/ab2/index.html", configuration );
+    Resource resource = new Resource( "/", configuration );
 
 //    System.out.print( "methods\n" );
 //    System.out.print( "headers\n" );
