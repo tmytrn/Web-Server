@@ -1,13 +1,20 @@
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 public class WebServer {
+
+  public static final int DEFAULTPORT = 8096;
 
   public static void main( String[] args ) {
     MimeTypes mimesFile = new MimeTypes( "conf/mime.types" );
     mimesFile.load();
     HttpdConf configuration = new HttpdConf( "conf/httpd.conf" );
     configuration.load();
+
+//    System.out.println(configuration.lookup("/ab/"));
     System.out.println(configuration.lookup("/"));
+
     //    //    configuration.load();
     //    //    System.out.println(configuration.lookup("Listen"));
     //    //    //System.out.println( mimesFile.lookup( "mp3" ) );
@@ -35,6 +42,26 @@ public class WebServer {
 //    System.out.print("\r\n" );
 //    System.out.print( "body\n" );
 //    System.out.print("\r\n" );
+
+    Socket client = null;
+    int numberOfRequests = 0;
+
+    try {
+      ServerSocket serverSocket = new ServerSocket( DEFAULTPORT );
+
+      while(true){
+        client = serverSocket.accept();
+        Request request = new Request( client.getInputStream() );
+        System.out.println( ++numberOfRequests );
+        client.close();
+      }
+
+    }
+    catch (Exception e){
+      //File document = new File(configuration.lookup("DirectoryIndex"));
+      //e.printStackTrace();
+      //404 error
+    }
 
 
   }
