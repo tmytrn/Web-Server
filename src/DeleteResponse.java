@@ -1,4 +1,3 @@
-import Responses.Response;
 
 public class DeleteResponse extends Response {
   public DeleteResponse( Request request, Resource resource){

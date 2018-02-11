@@ -1,4 +1,4 @@
-import Responses.Response;
+
 
 public class HeadResponse extends Response {
   public HeadResponse(Request request, Resource resource){

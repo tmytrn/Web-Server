@@ -1,5 +1,3 @@
-import Responses.Response;
-
 public class GetResponse extends Response {
 
   public GetResponse( Request request, Resource resource){

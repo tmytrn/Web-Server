@@ -1,7 +1,4 @@
-import Responses.Response;
-
 public class ResponseFactory {
-
   public Response getResponse( Request request, Resource resource){
   String verb = request.getVerb();
   String httpVersion = request.getHttpVersion();
