@@ -1,71 +1,99 @@
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
+import java.util.*;
 
 public class Resource {
   private byte[] byteArray;
-  HttpdConf configuration;
-  String fileURI;
-  File document;
+  private HttpdConf configuration;
+  private String fileURI;
+  private File document;
 
-  //convert the indexhtml to a byte array to throw into an output stream
-  public Resource(String uri, HttpdConf conf){
-    configuration = conf;
-    fileURI = uri;
+  public Resource( String uri, HttpdConf conf ) {
+    this.configuration = conf;
+    this.fileURI = uri;
+
     try {
-      document = new File( absolutePath() );
-      FileInputStream fileReader = new FileInputStream( document);
-      byteArray = new byte[(int)document.length()];
-      fileReader.read(byteArray);
-      System.out.println(new String(byteArray));
-      fileReader.close();
-    }
-    catch (Exception e){
+//      File document = new File( absolutePath() );
+//      FileInputStream fileReader = new FileInputStream( document);
+//      byteArray = new byte[(int)document.length()];
+//      fileReader.read(byteArray);
+//      System.out.println("does ht access exist: " +isProtected());
+//      System.out.println(new String(byteArray));
+//      fileReader.close();
+    } catch ( Exception e ) {
       e.printStackTrace();
       //500 error
     }
 
   }
 
-  public String absolutePath(){
-    if(isAliased( fileURI )){
-      fileURI = configuration.lookupAlias( fileURI );
+  public String absolutePath( ) {
+    if ( isAliased() ) {
+      modifyURI( this.configuration.getAliasMap() );
+    } else if ( isScript() ) {
+      modifyURI( this.configuration.getScriptAliasMap() );
+    } else {
+      this.addDocumentRootToTheStartOfURI();
     }
-    else if(isScript(fileURI)){
-      fileURI = configuration.lookupScript( fileURI );
+
+    if ( !isFile() ) {
+      this.appendDirectoryIndexToURI();
     }
-    else{
-      fileURI = appendDocumentRoot( fileURI );
-    }
-    if(isFile( fileURI )){
-      return fileURI;
-    }
-    else{
-      return fileURI + configuration.lookup( "DirectoryIndex" );
-    }
+
+    return this.fileURI;
+
   }
-  public boolean isFile(String uri){
-    File fileCheck = new File( uri);
+
+  private boolean isAliased( ) {
+    return this.uriContains( this.configuration.getAliasMap() );
+  }
+
+  private String addDocumentRootToTheStartOfURI( ) {
+    this.fileURI = configuration.lookupConfiguration( "DocumentRoot" ) + this.fileURI;
+    return this.fileURI;
+  }
+
+  private String appendDirectoryIndexToURI( ) {
+    this.fileURI += configuration.lookupConfiguration( "DirectoryIndex" );
+    return this.fileURI;
+  }
+
+  private boolean isFile( ) {
+    File fileCheck = new File( this.fileURI );
     return fileCheck.isFile();
   }
-  public boolean isAliased(String uri){
-    return (configuration.lookupAlias( uri ) != null);
 
+  public boolean isScript( ) {
+    return this.uriContains( this.configuration.getScriptAliasMap() );
   }
 
-  public String appendDocumentRoot(String uri){
-    return configuration.lookup( "DocumentRoot" ) + uri ;
+  public boolean isProtected( ) {
+    File htAccess = new File( "/public_html/.htaccess" );
+    return ( htAccess.exists() );
   }
 
-  public boolean isScript(String uri){
-    return (configuration.lookupScript( uri ) != null);
+  private boolean uriContains( HashMap<String, String> map ) {
+    for ( String keyToCheck : map.keySet() ) {
+      if ( this.fileURI.contains( keyToCheck ) ) {
+        System.out.println( "URI contains key : " + keyToCheck );
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  public boolean isProtected(){
-    File htAccess = new File("public_html/.htaccess");
-    return (htAccess.exists());
+  private void modifyURI( HashMap<String, String> map ) {
+    for ( String alias : map.keySet() ) {
+      if ( this.fileURI.contains( alias ) ) {
+        String replacement = this.configuration.lookupAlias( alias );
+        this.fileURI = this.fileURI.replace( alias, replacement );
+        System.out.println( "The modified fileURI is : " + this.fileURI );
+      }
+    }
   }
 
-  public File getFile(){
-    return document;
+  public File getFile( ) {
+    return this.document;
   }
+
 }

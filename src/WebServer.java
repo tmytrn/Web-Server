@@ -23,11 +23,10 @@ public class WebServer {
     this.mimeTypes.load();
   }
 
-
   public void listenToPort( ) {
     Socket client = null;
     int numberOfRequests = 0;
-    int portNumber = Integer.parseInt( this.configuration.lookup( "Listen" ) );
+    int portNumber = Integer.parseInt( this.configuration.lookupConfiguration( "Listen" ) );
 
     try {
       this.socket = new ServerSocket( portNumber );
@@ -49,6 +48,12 @@ public class WebServer {
   }
 
   public static void main( String[] args ) {
-    WebServer webServer = new WebServer();
+
+    HttpdConf conf = new HttpdConf( HTTPDCONFPATH );
+    conf.load();
+
+    Resource resource = new Resource( "/hello/google", conf );
+    resource.absolutePath();
+//    WebServer webServer = new WebServer();
   }
 }

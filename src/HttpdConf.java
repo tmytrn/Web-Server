@@ -9,11 +9,11 @@ public class HttpdConf extends ConfigurationReader {
     super( fileName );
     this.configuration = new HashMap<>();
     this.scriptAliasMap = new HashMap<>();
-    this.aliasMap = new HashMap<>( );
+    this.aliasMap = new HashMap<>();
   }
 
   public void skipUselessLines( ) {
-    while ( isEmptyString( this.getCurrentLine()) || startsWithAHashSymbol( this.getCurrentLine() )) {
+    while ( isEmptyString( this.getCurrentLine() ) || startsWithAHashSymbol( this.getCurrentLine() ) ) {
       this.setNextLine();
     }
   }
@@ -21,9 +21,11 @@ public class HttpdConf extends ConfigurationReader {
   public boolean hasAlias( String key ) {
     return key.equals( "Alias" );
   }
-  public boolean hasScriptAlias(String key){
+
+  public boolean hasScriptAlias( String key ) {
     return key.equals( "ScriptAlias" );
   }
+
   public boolean startsWithAHashSymbol( String stringToBeChecked ) {
     return stringToBeChecked.startsWith( "#" );
   }
@@ -39,26 +41,28 @@ public class HttpdConf extends ConfigurationReader {
 
     return path;
   }
-  public void addToAliasMap(String key, String value){
-    aliasMap.put(key, value);
+
+  public void addToAliasMap( String key, String value ) {
+    aliasMap.put( key, value );
   }
-  public void addToScriptAliasMap(String key, String value){
-    scriptAliasMap.put(key, value);
+
+  public void addToScriptAliasMap( String key, String value ) {
+    scriptAliasMap.put( key, value );
   }
+
   public void tokenizeCurrentLine( ) {
     StringTokenizer tokens = new StringTokenizer( this.getCurrentLine() );
     String valueToken;
     String keyToken = tokens.nextToken();
 
     while ( tokens.hasMoreTokens() ) {
-      if ( hasAlias( keyToken )) {
+      if ( hasAlias( keyToken ) ) {
         addToAliasMap( tokens.nextToken(), removeQuotes( tokens.nextToken() ) );
-      }
-      else if(hasScriptAlias( keyToken )){
+      } else if ( hasScriptAlias( keyToken ) ) {
         addToScriptAliasMap( tokens.nextToken(), removeQuotes( tokens.nextToken() ) );
-      }else{
+      } else {
         valueToken = tokens.nextToken();
-        configuration.put(keyToken, removeQuotes( valueToken ));
+        configuration.put( keyToken, removeQuotes( valueToken ) );
       }
     }
     this.setNextLine();
@@ -71,15 +75,27 @@ public class HttpdConf extends ConfigurationReader {
     }
   }
 
-  public String lookup( String string ) {
+  public String lookupConfiguration( String string ) {
     return configuration.get( string );
   }
-  public String lookupAlias(String alias){
-    return aliasMap.get(alias);
+
+  public String lookupAlias( String alias ) {
+    return aliasMap.get( alias );
   }
-  public String lookupScript(String script){
+
+  public String lookupScript( String script ) {
     return scriptAliasMap.get( script );
   }
 
+  public HashMap<String, String> getConfiguration( ) {
+    return this.configuration;
+  }
 
+  public HashMap<String, String> getAliasMap( ) {
+    return this.aliasMap;
+  }
+
+  public HashMap<String, String> getScriptAliasMap( ) {
+    return this.scriptAliasMap;
+  }
 }
