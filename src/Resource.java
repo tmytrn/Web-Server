@@ -5,17 +5,17 @@ public class Resource {
   private byte[] byteArray;
   HttpdConf configuration;
   String fileURI;
+  File document;
 
   //convert the indexhtml to a byte array to throw into an output stream
   public Resource(String uri, HttpdConf conf){
     configuration = conf;
     fileURI = uri;
     try {
-      File document = new File( absolutePath() );
+      document = new File( absolutePath() );
       FileInputStream fileReader = new FileInputStream( document);
       byteArray = new byte[(int)document.length()];
       fileReader.read(byteArray);
-      System.out.println("does ht access exist: " +isProtected());
       System.out.println(new String(byteArray));
       fileReader.close();
     }
@@ -53,7 +53,7 @@ public class Resource {
   }
 
   public String appendDocumentRoot(String uri){
-    return configuration.lookup( "DocumentRoot" ) + fileURI ;
+    return configuration.lookup( "DocumentRoot" ) + uri ;
   }
 
   public boolean isScript(String uri){
@@ -61,8 +61,11 @@ public class Resource {
   }
 
   public boolean isProtected(){
-    File htAccess = new File("public_html .htaccess");
+    File htAccess = new File("public_html/.htaccess");
     return (htAccess.exists());
   }
 
+  public File getFile(){
+    return document;
+  }
 }

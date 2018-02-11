@@ -1,18 +1,82 @@
-public abstract class Response {
-  private int code;
-  private String reasonPhrase;
-  private Resource resource;
-  public Response(Resource resource){
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.rmi.server.ExportException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
+public abstract class Response {
+  public int code;
+  public String reasonPhrase;
+  public Resource resource;
+  public Request request;
+  private LinkedHashMap <String, String> responseHeaders;
+  public Response( Request request, Resource resource){
+  this.request = request;
+  this.resource = resource;
+  responseHeaders = new LinkedHashMap<>();
+  responseHeaders.put("Date", getDate());
+  responseHeaders.put("Server", "web-server-lookin-like-a-snack");
+  if(resource != null){
+    buildResourceHeaders();
   }
-  /**
-   * general form of a response is
-   * HTTP_VERSION STATUS_CODE REASON_PHRASE
-   * HTTP_HEADERS
-   *
-   * BODY
-   *
-   *
-   */
+  }
+  public void send( OutputStream out){
+    String response = this.createHeaders();
+    try{
+      out.write( response.getBytes() );
+      out.flush();
+      sendResource( out );
+    }
+    catch(Exception e){
+
+    }
+  }
+  private void sendResource(OutputStream out){
+    if(resource != null) {
+      File file = resource.getFile();
+      byte[] fileBytes = new byte[(int)file.length()];
+      try {
+        FileInputStream fileToArray = new FileInputStream( file );
+        fileToArray.read(fileBytes);
+        out.write( fileBytes );
+      }
+      catch(Exception e){
+
+      }
+    }
+  }
+  public String createHeaders(){
+    StringBuilder headers = new StringBuilder(  );
+    headers.append(topLine());
+    for(String key: this.responseHeaders.keySet()) {
+      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
+    }
+    return headers.toString();
+  }
+  public String topLine(){
+    return request.getHttpVersion() + " " +  this.code + " " + this.reasonPhrase + "\r\n" ;
+  }
+  public String getDate(){
+    ZonedDateTime httpDate = ZonedDateTime.now(ZoneOffset.UTC);
+    return httpDate.format(DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy hh:mm:ss " )) + "GMT";
+  }
+  private void buildResourceHeaders(){
+    File content = resource.getFile();
+    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm:ss ");
+    responseHeaders.put("Last Modified", fileDateFormat.format(content.lastModified()) + "GMT");
+    responseHeaders.put("Content-Length",String.valueOf(content.length()) );
+    responseHeaders.put("Content-Type", request.lookup("Content-Type"));
+  }
+
+  public String getLogDate(){
+    SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MMM/yyyy hh:mm:ss Z" );
+    String date = dateFormat.format( new Date( ));
+    return date;
+  }
+
 
 }

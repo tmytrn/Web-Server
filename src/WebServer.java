@@ -23,6 +23,7 @@ public class WebServer {
     this.mimeTypes.load();
   }
 
+
   public void listenToPort( ) {
     Socket client = null;
     int numberOfRequests = 0;
