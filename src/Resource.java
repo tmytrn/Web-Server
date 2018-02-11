@@ -13,11 +13,11 @@ public class Resource {
     fileURI = uri;
     try {
       document = new File( absolutePath() );
-      FileInputStream fileReader = new FileInputStream( document);
-      byteArray = new byte[(int)document.length()];
-      fileReader.read(byteArray);
-      System.out.println(new String(byteArray));
-      fileReader.close();
+//      FileInputStream fileReader = new FileInputStream( document);
+//      byteArray = new byte[(int)document.length()];
+//      fileReader.read(byteArray);
+//      System.out.println(new String(byteArray));
+//      fileReader.close();
     }
     catch (Exception e){
       e.printStackTrace();
@@ -66,6 +66,6 @@ public class Resource {
   }
 
   public File getFile(){
-    return document;
+    return this.document;
   }
 }
