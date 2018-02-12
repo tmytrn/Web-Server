@@ -21,7 +21,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( resource != null ) {
+    if ( request.getBody() != null ) {
       buildResourceHeaders();
     }
   }
@@ -32,7 +32,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( resource != null ) {
+    if ( request.getBody() != null ) {
       buildResourceHeaders();
     }
   }
@@ -40,6 +40,8 @@ public abstract class Response {
   public void send( OutputStream out ) {
     String response = this.createHeaders();
     try {
+      String res = new String(response.getBytes());
+      System.out.println(res);
       out.write( response.getBytes() );
       out.flush();
       sendResource( out );
@@ -91,7 +93,7 @@ public abstract class Response {
   private String getMimeType(File file){
     String fileName = file.getName();
     String[] type = fileName.split("\\.");
-    System.out.println(type[1]);
+    //System.out.println(mimeTypes.lookup(type[1] ));
     return mimeTypes.lookup( type[1]);
   }
 
@@ -100,6 +102,4 @@ public abstract class Response {
     String date = dateFormat.format( new Date() );
     return date;
   }
-
-
 }

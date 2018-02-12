@@ -13,6 +13,7 @@ public class Resource {
     fileURI = uri;
     try {
       document = new File( absolutePath() );
+//      System.out.println(fileURI);
 //      FileInputStream fileReader = new FileInputStream( document);
 //      byteArray = new byte[(int)document.length()];
 //      fileReader.read(byteArray);
@@ -40,7 +41,8 @@ public class Resource {
       return fileURI;
     }
     else{
-      return fileURI + configuration.lookup( "DirectoryIndex" );
+      fileURI= fileURI + configuration.lookup( "DirectoryIndex" );
+      return fileURI;
     }
   }
   public boolean isFile(String uri){
