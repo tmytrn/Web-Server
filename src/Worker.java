@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.*;
 
 public class Worker implements Runnable {
@@ -19,6 +20,9 @@ public class Worker implements Runnable {
     try {
       request = new Request( this.client.getInputStream() );
       resource = new Resource( request.getUri(), this.config );
+      ResponseFactory responseMaker = new ResponseFactory(request, resource);
+      Response response = responseMaker.getResponse( request, resource, mimes);
+      response.send(client.getOutputStream());
 
 //      System.out.println( "resource and request made" );
 

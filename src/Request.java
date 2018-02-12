@@ -78,7 +78,7 @@ public class Request {
 //    } catch ( IOException e ) {
 //      e.printStackTrace();
 //    }
-    this.parseRequest( client );
+   this.parseRequest( client );
 
   }
 

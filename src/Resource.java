@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Resource {
+
   private HttpdConf configuration;
   private String fileURI;
   private File document;
