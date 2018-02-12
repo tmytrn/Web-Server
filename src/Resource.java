@@ -2,28 +2,16 @@ import java.io.*;
 import java.util.*;
 
 public class Resource {
-  private byte[] byteArray;
   private HttpdConf configuration;
   private String fileURI;
   private File document;
+  private String absolutePath;
 
   public Resource( String uri, HttpdConf conf ) {
     this.configuration = conf;
     this.fileURI = uri;
-
-    try {
-//      File document = new File( absolutePath() );
-//      FileInputStream fileReader = new FileInputStream( document);
-//      byteArray = new byte[(int)document.length()];
-//      fileReader.read(byteArray);
-//      System.out.println("does ht access exist: " +isProtected());
-//      System.out.println(new String(byteArray));
-//      fileReader.close();
-    } catch ( Exception e ) {
-      e.printStackTrace();
-      //500 error
-    }
-
+    this.absolutePath = absolutePath();
+    this.document = new File( this.absolutePath );
   }
 
   public String absolutePath( ) {
@@ -39,7 +27,7 @@ public class Resource {
       this.appendDirectoryIndexToURI();
     }
 
-    return this.fileURI;
+    return this.absolutePath;
 
   }
 
@@ -47,19 +35,17 @@ public class Resource {
     return this.uriContains( this.configuration.getAliasMap() );
   }
 
-  private String addDocumentRootToTheStartOfURI( ) {
-    this.fileURI = configuration.lookupConfiguration( "DocumentRoot" ) + this.fileURI;
-    return this.fileURI;
+  private void addDocumentRootToTheStartOfURI( ) {
+    this.absolutePath = configuration.lookupConfiguration( "DocumentRoot" ) + this.fileURI;
   }
 
   private String appendDirectoryIndexToURI( ) {
-    this.fileURI += configuration.lookupConfiguration( "DirectoryIndex" );
-    return this.fileURI;
+    this.absolutePath += configuration.lookupConfiguration( "DirectoryIndex" );
+    return this.absolutePath;
   }
 
   private boolean isFile( ) {
-    File fileCheck = new File( this.fileURI );
-    return fileCheck.isFile();
+    return new File( this.absolutePath ).isFile();
   }
 
   public boolean isScript( ) {
@@ -67,8 +53,13 @@ public class Resource {
   }
 
   public boolean isProtected( ) {
-    File htAccess = new File( "/public_html/.htaccess" );
-    return ( htAccess.exists() );
+    File htAccess = new File( this.getURIDirectoryTree() + "/.htaccess" );
+    return htAccess.exists();
+
+  }
+
+  public String getURIDirectoryTree( ) {
+    return this.absolutePath.substring( 0, this.absolutePath.lastIndexOf( "/" ) );
   }
 
   private boolean uriContains( HashMap<String, String> map ) {
@@ -86,7 +77,7 @@ public class Resource {
     for ( String alias : map.keySet() ) {
       if ( this.fileURI.contains( alias ) ) {
         String replacement = this.configuration.lookupAlias( alias );
-        this.fileURI = this.fileURI.replace( alias, replacement );
+        this.absolutePath = this.fileURI.replace( alias, replacement );
         System.out.println( "The modified fileURI is : " + this.fileURI );
       }
     }
@@ -94,6 +85,10 @@ public class Resource {
 
   public File getFile( ) {
     return this.document;
+  }
+
+  public String getAbsolutePath( ) {
+    return this.absolutePath;
   }
 
 }

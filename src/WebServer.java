@@ -52,8 +52,12 @@ public class WebServer {
     HttpdConf conf = new HttpdConf( HTTPDCONFPATH );
     conf.load();
 
-    Resource resource = new Resource( "/hello/google", conf );
-    resource.absolutePath();
+    Resource resource = new Resource( "/index.html", conf );
+
+//    File file = new File( "public_html/" ); // valid directory
+//    File file = new File( "public_html/index.html" ); // valid file
+//    System.out.println( file.isFile() );
+
 //    WebServer webServer = new WebServer();
   }
 }
