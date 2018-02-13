@@ -34,8 +34,9 @@ public class WebServer {
         client = this.socket.accept();
         System.out.println( "Request Number is: " + ++numberOfRequests );
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
-        Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
-        thread.start();
+        worker.run();
+//        Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
+//        thread.start();
       }
 
     } catch ( Exception e ) {
@@ -44,16 +45,6 @@ public class WebServer {
   }
 
   public static void main( String[] args ) {
-
-    HttpdConf conf = new HttpdConf( HTTPDCONFPATH );
-    conf.load();
-
-    Resource resource = new Resource( "/index.html", conf );
-
-//    File file = new File( "public_html/" ); // valid directory
-//    File file = new File( "public_html/index.html" ); // valid file
-//    System.out.println( file.isFile() );
-
-//    WebServer webServer = new WebServer();
+    WebServer webServer = new WebServer();
   }
 }
