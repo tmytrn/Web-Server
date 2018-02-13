@@ -45,15 +45,7 @@ public class WebServer {
 
   public static void main( String[] args ) {
 
-    HttpdConf conf = new HttpdConf( HTTPDCONFPATH );
-    conf.load();
 
-    Resource resource = new Resource( "/index.html", conf );
-
-//    File file = new File( "public_html/" ); // valid directory
-//    File file = new File( "public_html/index.html" ); // valid file
-//    System.out.println( file.isFile() );
-
-//    WebServer webServer = new WebServer();
+    WebServer webServer = new WebServer();
   }
 }

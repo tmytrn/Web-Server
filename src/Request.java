@@ -176,6 +176,7 @@ public class Request {
 
     try {
       inputStreamBody.read( this.body );
+      System.out.println(new String(this.body));
     } catch ( IOException e ) {
       e.printStackTrace();
     }

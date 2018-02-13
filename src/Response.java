@@ -21,10 +21,11 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( request.getBody() != null ) {
+    if ( resource != null ) {
       buildResourceHeaders();
     }
   }
+
   public Response( Request request, Resource resource , MimeTypes mimeTypes) {
     this.request = request;
     this.resource = resource;
@@ -32,7 +33,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( request.getBody() != null ) {
+    if ( resource != null ) {
       buildResourceHeaders();
     }
   }

@@ -5,7 +5,7 @@ public class PutResponse extends Response {
   public PutResponse(Request request, Resource resource){
     super(request, resource);
     this.resource = resource;
-    File filePath = new File(resource.fileURI);
+    File filePath = new File(resource.absolutePath());
 
     if(filePath.exists()){
       this.code = 200;
