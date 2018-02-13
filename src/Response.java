@@ -71,8 +71,9 @@ public abstract class Response {
     headers.append( topLine() );
     for ( String key : this.responseHeaders.keySet() ) {
 //      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
-      headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\r\n" );
+      headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
     }
+    headers.append( "\r\n" );
     return headers.toString();
   }
 
