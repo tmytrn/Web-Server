@@ -1,3 +1,4 @@
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -21,7 +22,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( request.getBody() != null ) {
+    if ( resource != null ) {
       buildResourceHeaders();
     }
   }
@@ -32,7 +33,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( request.getBody() != null ) {
+    if ( resource != null ) {
       buildResourceHeaders();
     }
   }
@@ -51,7 +52,7 @@ public abstract class Response {
       e.printStackTrace();
     }
   }
-  private void sendResource( OutputStream out ) {
+  private void sendResource( OutputStream out ) { // made into buffered output stream
     if ( resource != null ) {
       File file = resource.getFile();
       byte[] fileBytes = new byte[( int ) file.length()];
@@ -69,8 +70,10 @@ public abstract class Response {
     StringBuilder headers = new StringBuilder();
     headers.append( topLine() );
     for ( String key : this.responseHeaders.keySet() ) {
-      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
+//      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
+      headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
     }
+    headers.append( "\r\n" );
     return headers.toString();
   }
 
@@ -88,7 +91,8 @@ public abstract class Response {
     SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm:ss " );
     responseHeaders.put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
     responseHeaders.put( "Content-Length", String.valueOf( content.length() ) );
-    responseHeaders.put( "Content-Type", getMimeType( content ) );
+    responseHeaders.put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
+    System.out.println( this.responseHeaders.get( "Content-Length" ) );
   }
   private String getMimeType(File file){
     String fileName = file.getName();

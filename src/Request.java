@@ -8,8 +8,10 @@ public class Request {
   private String httpVersion;
   private HashMap<String, String> headers;
   private byte[] body;
+  private InputStream inputStream;
+  private BufferedReader inputStreamReader;
 
-  private static final HashMap<String, Boolean> VALIDHTTPVERBS = new HashMap<String, Boolean>() {
+  private static final HashMap<String, Boolean> VALID_HTTP_VERBS = new HashMap<String, Boolean>() {
     {
       put( "GET", true );
       put( "HEAD", true );
@@ -22,7 +24,7 @@ public class Request {
     }
   };
 
-  private static final HashMap<String, Boolean> VALIDHTTPVERSIONS = new HashMap<String, Boolean>() {
+  private static final HashMap<String, Boolean> VALID_HTTP_VERSIONS = new HashMap<String, Boolean>() {
     {
       put( "HTTP/1.0", true );
       put( "HTTP/1.1", true );
@@ -52,47 +54,19 @@ public class Request {
 
   public Request( InputStream client ) {
     this.headers = new HashMap<>();
-
-//    BufferedReader bufferedReader = new BufferedReader( new InputStreamReader (client) );
-//
-//    String lineRead;
-//    String[] lineReadSplit;
-//
-//    try {
-//      lineRead = bufferedReader.readLine();
-//
-//      //reading first line
-//      lineReadSplit = lineRead.split( " " );
-//      if ( isFirstLineOfRequest( lineReadSplit ) ) {
-//        this.setFirstLineOfRequest( lineReadSplit[0], lineReadSplit[1], lineReadSplit[2] );
-//      }else{
-//        //error
-//      }
-//
-//      //parsing headers
-//      while(!lineRead.equals( "" )){
-//        lineRead = bufferedReader.readLine();
-//        parseHeader( lineRead );
-//      }
-//
-//    } catch ( IOException e ) {
-//      e.printStackTrace();
-//    }
-   this.parseRequest( client );
-
+    this.inputStream = client;
+    this.inputStreamReader = new BufferedReader( new InputStreamReader( this.inputStream ) );
+    this.parseRequest();
   }
 
-  private void parseRequest( InputStream requestInputStream ) {
+  private void parseRequest( ) {
     try {
-      String lineRead = getNextLine( requestInputStream );
-
-      this.parseFirstLine( lineRead );
-
-      this.parseHeaderSection( requestInputStream );
+      this.parseFirstLine();
+      this.parseHeaderSection();
 
       if ( this.headers.containsKey( "Content-Length" ) &&
           ( this.verb.equals( "PUT" ) || this.verb.equals( "POST" ) ) ) {
-        this.parseBodySection( requestInputStream );
+        this.parseBodySection();
       }
 
     } catch ( IOException e ) {
@@ -100,28 +74,8 @@ public class Request {
     }
   }
 
-  private String getNextLine( InputStream inputStream ) throws IOException {
-    StringBuilder inputStreamRead = new StringBuilder();
-    char characterRead;
-
-    while ( ( characterRead = ( char ) inputStream.read() ) > 0 ) {
-      inputStreamRead.append( characterRead );
-
-      if ( characterRead == '\r' ) {
-        char newLineBreak = ( char ) inputStream.read();
-        if ( newLineBreak == '\n' ) {
-          inputStreamRead.deleteCharAt( inputStreamRead.lastIndexOf( "\r" ) );
-          return inputStreamRead.toString();
-        }
-      }
-    }
-
-    return inputStreamRead.toString();
-  }
-
-  private void parseFirstLine( String firstLine ) {
-    String[] lineSplit;
-    lineSplit = firstLine.split( " " );
+  private void parseFirstLine( ) throws IOException {
+    String[] lineSplit = this.inputStreamReader.readLine().split( " " );
 
     if ( isFirstLineOfRequest( lineSplit ) ) {
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
@@ -129,11 +83,11 @@ public class Request {
   }
 
   private boolean isValidHTTPVerb( String verbToCheck ) {
-    return VALIDHTTPVERBS.containsKey( verbToCheck );
+    return VALID_HTTP_VERBS.containsKey( verbToCheck );
   }
 
   private boolean isValidHTTPVersion( String httpVersion ) {
-    return VALIDHTTPVERSIONS.containsKey( httpVersion );
+    return VALID_HTTP_VERSIONS.containsKey( httpVersion );
   }
 
   private boolean isFirstLineOfRequest( String[] firstLineOfRequest ) {
@@ -151,11 +105,10 @@ public class Request {
     System.out.println( "httpVersion is: " + this.httpVersion );
   }
 
-  private void parseHeaderSection( InputStream inputStreamHeader ) throws IOException {
+  private void parseHeaderSection( ) throws IOException {
     String lineRead;
-
-    while ( inputStreamHeader.available() > 0 ) {
-      lineRead = getNextLine( inputStreamHeader );
+    while ( this.inputStreamReader.ready() ) {
+      lineRead = this.inputStreamReader.readLine();
       if ( lineRead.contains( ": " ) ) {
         this.parseHeader( lineRead );
       } else if ( lineRead.isEmpty() || lineRead.equals( "\r\n" ) ) {
@@ -170,12 +123,12 @@ public class Request {
     System.out.println( "header: " + currentHeader[0] + "   " + currentHeader[1] );
   }
 
-  private void parseBodySection( InputStream inputStreamBody ) {
+  private void parseBodySection( ) {
     int contentLength = Integer.parseInt( this.headers.get( "Content-Length" ) );
     this.body = new byte[contentLength];
 
     try {
-      inputStreamBody.read( this.body );
+      this.inputStream.read( this.body );
     } catch ( IOException e ) {
       e.printStackTrace();
     }
