@@ -26,6 +26,7 @@ public abstract class Response {
       buildResourceHeaders();
     }
   }
+
   public Response( Request request, Resource resource , MimeTypes mimeTypes) {
     this.request = request;
     this.resource = resource;
