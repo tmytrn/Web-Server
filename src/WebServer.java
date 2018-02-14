@@ -34,9 +34,9 @@ public class WebServer {
         client = this.socket.accept();
         System.out.println( "Request Number is: " + ++numberOfRequests );
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
-        worker.run();
-//        Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
-//        thread.start();
+//        worker.run();
+        Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
+        thread.start();
       }
 
     } catch ( Exception e ) {
@@ -46,5 +46,11 @@ public class WebServer {
 
   public static void main( String[] args ) {
     WebServer webServer = new WebServer();
+//    try {
+//      Htpassword htpassword = new Htpassword( "public_html/.htpasswd" );
+//      htpassword.isAuthorized( "Authorization: <type> <credentials>" );
+//    } catch ( IOException e ) {
+//      e.printStackTrace();
+//    }
   }
 }
