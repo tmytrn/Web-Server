@@ -51,8 +51,11 @@ public class Htpassword extends ConfigurationReader {
     // in the password file (keyed by username)
     // TODO: implement this - note that the encryption step is provided as a
     // method, below
+    if(this.passwords.containsKey( username )) {
+      return this.passwords.get( username ).equals( this.encryptClearPassword( password ) );
+    }
 
-    return this.passwords.get( username ).equals( this.encryptClearPassword( password ) );
+    return false;
   }
 
   private String encryptClearPassword( String password ) {
