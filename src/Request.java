@@ -128,7 +128,11 @@ public class Request {
     this.body = new byte[contentLength];
 
     try {
-      this.inputStream.read( this.body );
+
+      for(int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++){
+        this.body[bodyIndex] = (byte) this.inputStreamReader.read();
+      }
+
     } catch ( IOException e ) {
       e.printStackTrace();
     }

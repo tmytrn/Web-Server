@@ -93,7 +93,6 @@ public abstract class Response {
     responseHeaders.put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
     responseHeaders.put( "Content-Length", String.valueOf( content.length() ) );
     responseHeaders.put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
-    System.out.println( this.responseHeaders.get( "Content-Length" ) );
   }
   private String getMimeType(File file){
     String fileName = file.getName();
