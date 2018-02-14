@@ -1,4 +1,4 @@
-import java.io.BufferedOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -22,7 +22,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( resource != null ) {
+    if ( sendingFile()) {
       buildResourceHeaders();
     }
   }
@@ -34,7 +34,7 @@ public abstract class Response {
     responseHeaders = new LinkedHashMap<>();
     responseHeaders.put( "Date", getDate() );
     responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( resource != null ) {
+    if ( sendingFile() ) {
       buildResourceHeaders();
     }
   }
@@ -53,6 +53,7 @@ public abstract class Response {
       e.printStackTrace();
     }
   }
+
   private void sendResource( OutputStream out ) { // made into buffered output stream
     if ( resource != null ) {
       File file = resource.getFile();
@@ -85,6 +86,10 @@ public abstract class Response {
   public String getDate( ) {
     ZonedDateTime httpDate = ZonedDateTime.now( ZoneOffset.UTC );
     return httpDate.format( DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy hh:mm:ss " ) ) + "GMT";
+  }
+  private boolean sendingFile(){
+    String verb = request.getVerb();
+    return verb.equals( "GET" ) || verb.equals("HEAD");
   }
 
   private void buildResourceHeaders( ) {
