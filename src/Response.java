@@ -1,11 +1,7 @@
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.*;
+import java.text.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 public abstract class Response {
@@ -13,111 +9,76 @@ public abstract class Response {
   private String reasonPhrase;
   private Resource resource;
   private Request request;
-  private MimeTypes mimeTypes;
-  private LinkedHashMap<String, String> responseHeaders;
+  private HashMap<String, String> responseHeaders;
 
-  public Response(Request request, Resource resource){
+  public Response( Request request, Resource resource ) {
     this.request = request;
     this.resource = resource;
-    responseHeaders = new LinkedHashMap<>();
-    responseHeaders.put( "Date", getDate() );
-    responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( sendingFile()) {
-      buildResourceHeaders();
-    }
+    this.responseHeaders = new HashMap();
+    this.putDefaultHeaders();
   }
 
-  public Response( Request request, Resource resource , MimeTypes mimeTypes) {
-    this.request = request;
-    this.resource = resource;
-    this.mimeTypes = mimeTypes;
-    responseHeaders = new LinkedHashMap<>();
-    responseHeaders.put( "Date", getDate() );
-    responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
-    if ( sendingFile() ) {
-      buildResourceHeaders();
-    }
-  }
-
-  public void send( OutputStream out ) {
-    String response = this.createHeaders();
-    try {
-      String res = new String(response.getBytes());
-      System.out.println(res);
-      out.write( response.getBytes() );
-      out.flush();
-      sendResource( out );
-      out.flush();
-      out.close();
-    } catch ( Exception e ) {
-      e.printStackTrace();
-    }
-  }
-
-  private void sendResource( OutputStream out ) { // made into buffered output stream
-    if ( resource != null ) {
-      File file = resource.getFile();
-      byte[] fileBytes = new byte[( int ) file.length()];
-      try {
-        FileInputStream fileToArray = new FileInputStream( file );
-        fileToArray.read( fileBytes );
-        out.write( fileBytes );
-      } catch ( Exception e ) {
-
-      }
-    }
-  }
-
-  public String createHeaders( ) {
-    StringBuilder headers = new StringBuilder();
-    headers.append( topLine() );
-    for ( String key : this.responseHeaders.keySet() ) {
-//      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
-      headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
-    }
-    headers.append( "\r\n" );
-    return headers.toString();
-  }
-
-  public String topLine( ) {
-    return request.getHttpVersion() + " " + this.code + " " + this.reasonPhrase + "\r\n";
+  public void putDefaultHeaders( ) {
+    this.responseHeaders.put( "Date", getDate() );
+    this.responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
   }
 
   public String getDate( ) {
     ZonedDateTime httpDate = ZonedDateTime.now( ZoneOffset.UTC );
     return httpDate.format( DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy hh:mm:ss " ) ) + "GMT";
   }
-  private boolean sendingFile(){
-    String verb = request.getVerb();
-    return verb.equals( "GET" ) || verb.equals("HEAD");
+
+  abstract void send( OutputStream out );
+
+  public String createHeaders( ) {
+    StringBuilder headers = new StringBuilder();
+    headers.append( firstHeadersLine() );
+    for ( String key : this.responseHeaders.keySet() ) {
+      headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
+    }
+    headers.append( "\r\n" );
+    return headers.toString();
   }
 
-  private void buildResourceHeaders( ) {
-    File content = resource.getFile();
-    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy hh:mm:ss " );
-    responseHeaders.put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
-    responseHeaders.put( "Content-Length", String.valueOf( content.length() ) );
-    responseHeaders.put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
-  }
-  private String getMimeType(File file){
-    String fileName = file.getName();
-    String[] type = fileName.split("\\.");
-    return mimeTypes.lookup( type[1]);
+  public String firstHeadersLine( ) {
+    return this.request.getHttpVersion() + " " + this.code + " " + this.reasonPhrase + "\r\n";
   }
 
-  public String getLogDate( ) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MMM/yyyy hh:mm:ss Z" );
-    String date = dateFormat.format( new Date() );
-    return date;
-  }
-  public byte[] getRequestBody(){
-    return request.getBody();
+//  public String getLogDate( ) {
+//    SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MMM/yyyy hh:mm:ss Z" );
+//    String date = dateFormat.format( new Date() );
+//    return date;
+//  }
+
+  public int getCode(){
+    return this.code;
   }
 
-  public void setCode(int responseCode){
+  public String getReasonPhrase(){
+    return this.reasonPhrase;
+  }
+
+  public Resource getResource(){
+    return this.resource;
+  }
+
+  public Request getRequest(){
+    return this.request;
+  }
+
+  public HashMap<String, String> getResponseHeaders( ) {
+    return responseHeaders;
+  }
+
+  public byte[] getRequestBody( ) {
+    return this.request.getBody();
+  }
+
+  public void setCode( int responseCode ) {
     this.code = responseCode;
   }
-  public void setReasonPhrase(String reasonPhrase){
+
+  public void setReasonPhrase( String reasonPhrase ) {
     this.reasonPhrase = reasonPhrase;
   }
 

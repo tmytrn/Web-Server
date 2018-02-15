@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class PutResponse extends Response {
   public PutResponse(Request request, Resource resource){
@@ -13,6 +14,12 @@ public class PutResponse extends Response {
       createResource(filePath);
     }
   }
+
+  @Override
+  void send( OutputStream out ) {
+
+  }
+
   public void createResource(File createFile){
       createFile.getParentFile().mkdirs();
       try {

@@ -1,3 +1,5 @@
+import java.io.OutputStream;
+
 public class PostResponse extends Response {
 
   public PostResponse(Request request, Resource resource){
@@ -6,9 +8,9 @@ public class PostResponse extends Response {
     this.setReasonPhrase("OK" );
   }
 
+  void send( OutputStream out ) {
 
-
-
+  }
 
 
 }
