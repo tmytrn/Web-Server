@@ -6,16 +6,14 @@ public class ResponseFactory {
   MimeTypes mimeTypes;
   Htaccess htAccess;
 
-  public ResponseFactory( Request request, Resource resource, MimeTypes mimeTypes) {
-  
-  public ResponseFactory(Request request, Resource resource){
+  public ResponseFactory( Request request, Resource resource , MimeTypes mimeTypes) {
     this.request = request;
     this.resource = resource;
     this.mimeTypes = mimeTypes;
   }
-    
-  public Response getResponse( Request request, Resource resource) {
-  //    if(this.resource.isProtected()){
+
+  public Response getResponse( Request request, Resource resource ) {
+    //    if(this.resource.isProtected()){
 //      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
 //
 //      System.out.println( this.request.lookup( "Authorization" ) );
@@ -23,12 +21,11 @@ public class ResponseFactory {
 //        return new UnauthorizedResponse( request,resource );
 //      }
 //    }
-  
+
     //check authorization
     if ( !new File( resource.getAbsolutePath() ).exists() ) {
       return new NotFoundResponse( request, resource );
-    }
-    else if(resource.isScript()){
+    } else if ( resource.isScript() ) {
 
     }
     String verb = request.getVerb();
@@ -44,7 +41,7 @@ public class ResponseFactory {
       case "DELETE":
         return new DeleteResponse( request, resource );
     }
-  
+
     return null;
   }
 
