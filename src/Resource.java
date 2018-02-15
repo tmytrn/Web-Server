@@ -7,6 +7,7 @@ public class Resource {
   private String fileURI;
   private File document;
   private String absolutePath;
+  private String htAccessLocation;
 
   public Resource( String uri, HttpdConf conf ) {
     this.configuration = conf;
@@ -54,13 +55,14 @@ public class Resource {
   }
 
   public boolean isProtected( ) {
-    File htAccess = new File( this.getURIDirectoryTree() + "/.htaccess" );
+    this.htAccessLocation = this.getURIDirectoryTree() + "/.htaccess";
+    File htAccess = new File( this.htAccessLocation );
     return htAccess.exists();
 
   }
 
   public String getURIDirectoryTree( ) {
-    return this.absolutePath.substring( 0, this.absolutePath.lastIndexOf( "/" ) );
+    return this.absolutePath.substring( 0, this.absolutePath.lastIndexOf( '/' ) );
   }
 
   private boolean uriContains( HashMap<String, String> map ) {
@@ -90,6 +92,10 @@ public class Resource {
 
   public String getAbsolutePath( ) {
     return this.absolutePath;
+  }
+
+  public String getHtAccessLocation(){
+    return this.htAccessLocation;
   }
 
 }

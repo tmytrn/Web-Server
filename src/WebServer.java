@@ -46,11 +46,8 @@ public class WebServer {
 
   public static void main( String[] args ) {
     WebServer webServer = new WebServer();
-//    try {
-//      Htpassword htpassword = new Htpassword( "public_html/.htpasswd" );
-//      htpassword.isAuthorized( "Authorization: <type> <credentials>" );
-//    } catch ( IOException e ) {
-//      e.printStackTrace();
-//    }
+//    Htaccess htaccess = new Htaccess( "/Users/niszeto/IdeaProjects/web-server-lookin-like-a-snack/src/public_html/.htaccess" );
+//    System.out.println( htaccess.isAuthorized( "YWxhZGRpbjpvcGVuc2VzYW1l" ) );
+
   }
 }

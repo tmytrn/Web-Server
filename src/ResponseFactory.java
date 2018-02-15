@@ -4,14 +4,26 @@ public class ResponseFactory {
   Request request;
   Resource resource;
   MimeTypes mimeTypes;
+  Htaccess htAccess;
 
   public ResponseFactory( Request request, Resource resource, MimeTypes mimeTypes) {
+  
+  public ResponseFactory(Request request, Resource resource){
     this.request = request;
     this.resource = resource;
     this.mimeTypes = mimeTypes;
   }
-
+    
   public Response getResponse( Request request, Resource resource) {
+  //    if(this.resource.isProtected()){
+//      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
+//
+//      System.out.println( this.request.lookup( "Authorization" ) );
+//      if(this.request.lookup( "Authorization" ) == null){
+//        return new UnauthorizedResponse( request,resource );
+//      }
+//    }
+  
     //check authorization
     if ( !new File( resource.getAbsolutePath() ).exists() ) {
       return new NotFoundResponse( request, resource );
@@ -32,6 +44,7 @@ public class ResponseFactory {
       case "DELETE":
         return new DeleteResponse( request, resource );
     }
+  
     return null;
   }
 
