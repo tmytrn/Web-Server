@@ -8,12 +8,16 @@ public class Resource {
   private File document;
   private String absolutePath;
   private String htAccessLocation;
+  private boolean isScriptAlias;
+  private boolean isAlias;
 
   public Resource( String uri, HttpdConf conf ) {
     this.configuration = conf;
     this.fileURI = uri;
     this.absolutePath = absolutePath();
     this.document = new File( this.absolutePath );
+    this.isAlias = this.uriContains( this.configuration.getAliasMap() );
+    this.isScriptAlias = this.uriContains( this.configuration.getScriptAliasMap() );
   }
 
   public String absolutePath( ) {
@@ -34,7 +38,7 @@ public class Resource {
   }
 
   private boolean isAliased( ) {
-    return this.uriContains( this.configuration.getAliasMap() );
+    return this.isAlias;
   }
 
   private void addDocumentRootToTheStartOfURI( ) {
@@ -51,7 +55,7 @@ public class Resource {
   }
 
   public boolean isScript( ) {
-    return this.uriContains( this.configuration.getScriptAliasMap() );
+    return this.isScriptAlias;
   }
 
   public boolean isProtected( ) {
