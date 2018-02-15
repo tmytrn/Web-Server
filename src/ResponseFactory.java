@@ -1,11 +1,23 @@
 public class ResponseFactory {
   Request request;
-  Resource resource ;
+  Resource resource;
+  Htaccess htAccess;
+
   public ResponseFactory(Request request, Resource resource){
     this.request = request;
     this.resource = resource;
   }
+
   public Response getResponse( Request request, Resource resource, MimeTypes mimeTypes){
+//    if(this.resource.isProtected()){
+//      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
+//
+//      System.out.println( this.request.lookup( "Authorization" ) );
+//      if(this.request.lookup( "Authorization" ) == null){
+//        return new UnauthorizedResponse( request,resource );
+//      }
+//    }
+
   String verb = request.getVerb();
   switch(verb){
     case "GET":
