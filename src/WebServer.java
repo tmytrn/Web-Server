@@ -45,9 +45,9 @@ public class WebServer {
   }
 
   public static void main( String[] args ) {
-//    WebServer webServer = new WebServer();
-    Htaccess htaccess = new Htaccess( "/Users/niszeto/IdeaProjects/web-server-lookin-like-a-snack/src/public_html/.htaccess" );
-    System.out.println( htaccess.isAuthorized( "YWxhZGRpbjpvcGVuc2VzYW1l" ) );
+    WebServer webServer = new WebServer();
+//    Htaccess htaccess = new Htaccess( "/Users/niszeto/IdeaProjects/web-server-lookin-like-a-snack/src/public_html/.htaccess" );
+//    System.out.println( htaccess.isAuthorized( "YWxhZGRpbjpvcGVuc2VzYW1l" ) );
 
   }
 }
