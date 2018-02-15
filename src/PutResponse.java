@@ -4,12 +4,10 @@ import java.io.FileOutputStream;
 public class PutResponse extends Response {
   public PutResponse(Request request, Resource resource){
     super(request, resource);
-    this.resource = resource;
     File filePath = new File(resource.absolutePath());
-
     if(filePath.exists()){
-      this.code = 200;
-      this.reasonPhrase = "OK";
+      this.setCode(200);
+      this.setReasonPhrase("OK");
     }
     else{
       createResource(filePath);
@@ -20,11 +18,11 @@ public class PutResponse extends Response {
       try {
         createFile.createNewFile();
         FileOutputStream fileOutputStream = new FileOutputStream( createFile );
-        fileOutputStream.write( request.getBody() );
+        fileOutputStream.write( this.getRequestBody() );
         fileOutputStream.flush();
         fileOutputStream.close();
-        this.code = 201;
-        this.reasonPhrase = "Created";
+        this.setCode(201);
+        this.setReasonPhrase("Created");
 
       }catch(Exception e){
         e.printStackTrace();

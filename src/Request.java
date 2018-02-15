@@ -38,7 +38,6 @@ public class Request {
     String currentLine;
     String[] currentLineSplit;
 
-
     while ( tokenizer.hasMoreTokens() ) {
       currentLine = tokenizer.nextToken();
       currentLineSplit = currentLine.split( " " );
