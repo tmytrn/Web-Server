@@ -9,10 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public abstract class Response {
-  public int code;
-  public String reasonPhrase;
-  public Resource resource;
-  public Request request;
+  private int code;
+  private String reasonPhrase;
+  private Resource resource;
+  private Request request;
   private MimeTypes mimeTypes;
   private LinkedHashMap<String, String> responseHeaders;
 
@@ -102,7 +102,6 @@ public abstract class Response {
   private String getMimeType(File file){
     String fileName = file.getName();
     String[] type = fileName.split("\\.");
-    //System.out.println(mimeTypes.lookup(type[1] ));
     return mimeTypes.lookup( type[1]);
   }
 
@@ -111,4 +110,15 @@ public abstract class Response {
     String date = dateFormat.format( new Date() );
     return date;
   }
+  public byte[] getRequestBody(){
+    return request.getBody();
+  }
+
+  public void setCode(int responseCode){
+    this.code = responseCode;
+  }
+  public void setReasonPhrase(String reasonPhrase){
+    this.reasonPhrase = reasonPhrase;
+  }
+
 }
