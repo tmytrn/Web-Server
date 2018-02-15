@@ -14,10 +14,10 @@ public class Resource {
   public Resource( String uri, HttpdConf conf ) {
     this.configuration = conf;
     this.fileURI = uri;
-    this.absolutePath = absolutePath();
-    this.document = new File( this.absolutePath );
     this.isAlias = this.uriContains( this.configuration.getAliasMap() );
     this.isScriptAlias = this.uriContains( this.configuration.getScriptAliasMap() );
+    this.absolutePath = absolutePath();
+    this.document = new File( this.absolutePath );
   }
 
   public String absolutePath( ) {
@@ -80,10 +80,10 @@ public class Resource {
     return false;
   }
 
-  private void modifyURI( HashMap<String, String> map ) {
-    for ( String alias : map.keySet() ) {
+  private void modifyURI( HashMap<String, String> mapToBeChecked ) {
+    for ( String alias : mapToBeChecked.keySet() ) {
       if ( this.fileURI.contains( alias ) ) {
-        String replacement = this.configuration.lookupAlias( alias );
+        String replacement = mapToBeChecked.get( alias );
         this.absolutePath = this.fileURI.replace( alias, replacement );
         System.out.println( "The modified fileURI is : " + this.fileURI );
       }
