@@ -9,18 +9,35 @@ public abstract class Response {
   private String reasonPhrase;
   private Resource resource;
   private Request request;
+  private MimeTypes mimeTypes;
   private HashMap<String, String> responseHeaders;
 
-  public Response( Request request, Resource resource ) {
+  public Response( Request request, Resource resource, MimeTypes mimeTypes ) {
     this.request = request;
     this.resource = resource;
+    this.mimeTypes = mimeTypes;
     this.responseHeaders = new HashMap();
     this.putDefaultHeaders();
+    this.putResourceHeaders();
   }
 
   public void putDefaultHeaders( ) {
     this.responseHeaders.put( "Date", getDate() );
     this.responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
+  }
+
+  private void putResourceHeaders( ) {
+    File content = this.getResource().getFile();
+    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
+    this.getResponseHeaders().put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
+    this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
+    this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
+  }
+
+  private String getMimeType( File file ) {
+    String fileName = file.getName();
+    String[] type = fileName.split( "\\." );
+    return mimeTypes.lookup( type[type.length - 1] );
   }
 
   public String getDate( ) {

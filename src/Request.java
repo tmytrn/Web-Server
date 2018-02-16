@@ -165,4 +165,8 @@ public class Request {
     return this.headers.get( header );
   }
 
+  public HashMap<String, String> getHeaders() {
+    return headers;
+  }
+
 }
