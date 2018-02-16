@@ -30,8 +30,13 @@ public class Worker implements Runnable {
       //send response back to stream
 
       this.client.close();
-    } catch ( IOException e ) {
+    } catch ( Exception e ) {
       e.printStackTrace();
+      try {
+        throw new BadRequest( "Bad Request" );
+      } catch ( BadRequest badRequest ) {
+        badRequest.printStackTrace();
+      }
     }
   }
 }

@@ -18,9 +18,6 @@ public class Request {
       put( "POST", true );
       put( "PUT", true );
       put( "DELETE", true );
-      put( "TRACE", true );
-      put( "CONNECT", true );
-      put( "PATCH", true );
     }
   };
 
@@ -51,14 +48,19 @@ public class Request {
     }
   }
 
-  public Request( InputStream client ) {
+  public Request( InputStream client ) throws BadRequest {
     this.headers = new HashMap<>();
     this.inputStream = client;
     this.inputStreamReader = new BufferedReader( new InputStreamReader( this.inputStream ) );
-    this.parseRequest();
+    try{
+      this.parseRequest();
+    } catch ( Exception e ){
+      e.printStackTrace();
+      throw new BadRequest( "Bad Request" );
+    }
   }
 
-  private void parseRequest( ) {
+  private void parseRequest( ) throws BadRequest {
     try {
       this.parseFirstLine();
       this.parseHeaderSection();
@@ -68,16 +70,19 @@ public class Request {
         this.parseBodySection();
       }
 
-    } catch ( IOException e ) {
+    } catch ( Exception e ) {
       e.printStackTrace();
+      throw new BadRequest( "Bad Request" );
     }
   }
 
-  private void parseFirstLine( ) throws IOException {
+  private void parseFirstLine( ) throws IOException, BadRequest {
     String[] lineSplit = this.inputStreamReader.readLine().split( " " );
 
     if ( isFirstLineOfRequest( lineSplit ) ) {
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
+    }else{
+      throw new BadRequest( "Bad Request" );
     }
   }
 
@@ -155,6 +160,10 @@ public class Request {
 
   public String lookup( String header ) {
     return this.headers.get( header );
+  }
+
+  public HashMap<String, String> getHeaders() {
+    return headers;
   }
 
 }

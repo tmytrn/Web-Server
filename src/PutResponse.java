@@ -1,9 +1,10 @@
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class PutResponse extends Response {
-  public PutResponse(Request request, Resource resource){
-    super(request, resource);
+  public PutResponse(Request request, Resource resource, MimeTypes mimeTypes){
+    super(request, resource, mimeTypes);
     File filePath = new File(resource.absolutePath());
     if(filePath.exists()){
       this.setCode(200);
@@ -13,6 +14,12 @@ public class PutResponse extends Response {
       createResource(filePath);
     }
   }
+
+  @Override
+  void send( OutputStream out ) {
+
+  }
+
   public void createResource(File createFile){
       createFile.getParentFile().mkdirs();
       try {
