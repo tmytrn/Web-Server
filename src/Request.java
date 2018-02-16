@@ -18,9 +18,6 @@ public class Request {
       put( "POST", true );
       put( "PUT", true );
       put( "DELETE", true );
-      put( "TRACE", true );
-      put( "CONNECT", true );
-      put( "PATCH", true );
     }
   };
 

@@ -6,7 +6,7 @@ public class GetResponse extends Response {
   public GetResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
     super( request, resource, mimeTypes );
     if(this.getRequest().getHeaders().containsKey( "If-Modified-Since" )){
-
+      System.out.println( "HELLO THERE" + this.getRequest().getHeaders().get( "If-Modified-Since" ) );
     }
 
     this.setCode( 200 );

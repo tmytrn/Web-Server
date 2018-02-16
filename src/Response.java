@@ -31,7 +31,7 @@ public abstract class Response {
     SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
     this.getResponseHeaders().put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
     this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
-    this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
+    this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
   }
 
   private String getMimeType( File file ) {
@@ -42,7 +42,7 @@ public abstract class Response {
 
   public String getDate( ) {
     ZonedDateTime httpDate = ZonedDateTime.now( ZoneOffset.UTC );
-    return httpDate.format( DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy hh:mm:ss " ) ) + "GMT";
+    return httpDate.format( DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy HH:mm:ss " ) ) + "GMT";
   }
 
   abstract void send( OutputStream out );
@@ -58,7 +58,7 @@ public abstract class Response {
   }
 
   public String firstHeadersLine( ) {
-    return this.request.getHttpVersion() + " " + this.code + " " + this.reasonPhrase + "\r\n";
+    return this.request.getHttpVersion() + " " + this.code + " " + this.reasonPhrase + "\n";
   }
 
 //  public String getLogDate( ) {
