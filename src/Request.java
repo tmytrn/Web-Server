@@ -6,6 +6,7 @@ public class Request {
   private String verb;
   private String uri;
   private String httpVersion;
+  private String queryString;
   private HashMap<String, String> headers;
   private byte[] body;
   private InputStream inputStream;
@@ -76,10 +77,12 @@ public class Request {
     }
   }
 
+
   private void parseFirstLine( ) throws IOException, BadRequest {
     String[] lineSplit = this.inputStreamReader.readLine().split( " " );
 
     if ( isFirstLineOfRequest( lineSplit ) ) {
+
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
     }else{
       throw new BadRequest( "Bad Request" );
@@ -102,7 +105,11 @@ public class Request {
 
   private void setFirstLineOfRequest( String verb, String uri, String httpVersion ) {
     this.verb = verb;
-    this.uri = uri;
+    if(hasQueryString( uri )){
+      parseQueryString( uri );
+    }else {
+      this.uri = uri;
+    }
     this.httpVersion = httpVersion;
     System.out.println( "verb is: " + this.verb );
     System.out.println( "uri is: " + this.uri );
@@ -123,8 +130,9 @@ public class Request {
 
   private void parseHeader( String header ) {
     String[] currentHeader = header.split( ": " );
+
     this.headers.put( currentHeader[0], currentHeader[1] );
-    System.out.println( "header: " + currentHeader[0] + "   " + currentHeader[1] );
+    System.out.println( "header: " + currentHeader[0] + " :  " + currentHeader[1] );
   }
 
   private void parseBodySection( ) {
@@ -135,13 +143,30 @@ public class Request {
 
       for(int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++){
         this.body[bodyIndex] = (byte) this.inputStreamReader.read();
+
       }
+      System.out.println(new String(this.body));
 
     } catch ( IOException e ) {
       e.printStackTrace();
     }
   }
+  private boolean hasQueryString(String uri){
+    String [] uriDissect = uri.split( "\\?" );
+    return (uriDissect.length > 1);
+  }
+  private void parseQueryString(String uri){
+    String [] query = uri.split( "\\?" );
+    this.queryString = query[1];
+    this.uri = query[0];
+  }
 
+  public String getQueryString(){
+    return this.queryString;
+  }
+  public HashMap<String, String> getHeaders(){
+    return this.headers;
+  }
   public String getUri( ) {
     return this.uri;
   }

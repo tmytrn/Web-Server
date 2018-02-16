@@ -6,7 +6,8 @@ public class DeleteResponse extends Response {
     super( request, resource, mimeTypes );
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
-    File fileToDelete = new File( resource.getAbsolutePath() );
+    File fileToDelete = new File(resource.getAbsolutePath());
+    deleteFile( fileToDelete );
   }
 
   @Override

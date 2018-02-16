@@ -72,7 +72,7 @@ public class Resource {
   private boolean uriContains( HashMap<String, String> map ) {
     for ( String keyToCheck : map.keySet() ) {
       if ( this.fileURI.contains( keyToCheck ) ) {
-        System.out.println( "URI contains key : " + keyToCheck );
+        //System.out.println( "URI contains key : " + keyToCheck );
         return true;
       }
     }

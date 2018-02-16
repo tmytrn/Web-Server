@@ -71,6 +71,10 @@ public abstract class Response {
     return this.code;
   }
 
+  private boolean sendingFile(){
+    String verb = request.getVerb();
+    return verb.equals( "GET" );
+
   public String getReasonPhrase(){
     return this.reasonPhrase;
   }
@@ -78,6 +82,11 @@ public abstract class Response {
   public Resource getResource(){
     return this.resource;
   }
+
+  private String getMimeType(File file){
+    String fileName = file.getName();
+    String[] type = fileName.split("\\.");
+    return mimeTypes.lookup( type[1]);
 
   public Request getRequest(){
     return this.request;

@@ -21,8 +21,7 @@ public class ResponseFactory {
 //        return new UnauthorizedResponse( request,resource );
 //      }
 //    }
-
-    //check authorization
+    
     if ( !new File( resource.getAbsolutePath() ).exists() ) {
       System.out.println( resource.getAbsolutePath() + "        path doesn't exist" );
       return new NotFoundResponse( request, resource, this.mimeTypes );
@@ -30,6 +29,10 @@ public class ResponseFactory {
 
     }
 
+    if(resource.isScript()){
+      return new ScriptResponse( request, resource );
+    }
+    
     String verb = request.getVerb();
     switch ( verb ) {
       case "GET":
