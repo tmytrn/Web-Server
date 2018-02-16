@@ -72,7 +72,6 @@ public abstract class Response {
     StringBuilder headers = new StringBuilder();
     headers.append( topLine() );
     for ( String key : this.responseHeaders.keySet() ) {
-//      headers.append( key + ": " + this.responseHeaders.get( key ) + "\r\n" );
       headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
     }
     headers.append( "\r\n" );
@@ -89,7 +88,7 @@ public abstract class Response {
   }
   private boolean sendingFile(){
     String verb = request.getVerb();
-    return verb.equals( "GET" ) || verb.equals("HEAD");
+    return verb.equals( "GET" );
   }
 
   private void buildResourceHeaders( ) {
@@ -99,6 +98,7 @@ public abstract class Response {
     responseHeaders.put( "Content-Length", String.valueOf( content.length() ) );
     responseHeaders.put( "Content-Type", getMimeType( content ) + "; charset=utf-8" ); //include charset
   }
+
   private String getMimeType(File file){
     String fileName = file.getName();
     String[] type = fileName.split("\\.");
@@ -110,10 +110,10 @@ public abstract class Response {
     String date = dateFormat.format( new Date() );
     return date;
   }
+
   public byte[] getRequestBody(){
     return request.getBody();
   }
-
   public void setCode(int responseCode){
     this.code = responseCode;
   }

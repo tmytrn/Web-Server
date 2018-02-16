@@ -23,17 +23,22 @@ public class ResponseFactory {
 //    }
 
     //check authorization
-    if ( !new File( resource.getAbsolutePath() ).exists() ) {
-      return new NotFoundResponse( request, resource );
-    } else if ( resource.isScript() ) {
-
+//    if ( !new File( resource.getAbsolutePath() ).exists() ) {
+//      //return new NotFoundResponse( request, resource );
+//    }
+//    else if ( resource.isScript() ) {
+//      //execute script
+//
+//    }
+    if(resource.isScript()){
+      return new ScriptResponse( request, resource );
     }
     String verb = request.getVerb();
     switch ( verb ) {
       case "GET":
         return new GetResponse( request, resource, mimeTypes );
       case "HEAD":
-        return new HeadResponse( request, resource, mimeTypes );
+        return new HeadResponse( request, resource);
       case "POST":
         return new PostResponse( request, resource );
       case "PUT":

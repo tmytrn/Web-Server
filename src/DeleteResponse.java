@@ -6,6 +6,7 @@ public class DeleteResponse extends Response {
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
     File fileToDelete = new File(resource.getAbsolutePath());
+    deleteFile( fileToDelete );
   }
 
   private void deleteFile(File fileToDelete){

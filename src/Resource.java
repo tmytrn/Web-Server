@@ -68,7 +68,7 @@ public class Resource {
   private boolean uriContains( HashMap<String, String> map ) {
     for ( String keyToCheck : map.keySet() ) {
       if ( this.fileURI.contains( keyToCheck ) ) {
-        System.out.println( "URI contains key : " + keyToCheck );
+        //System.out.println( "URI contains key : " + keyToCheck );
         return true;
       }
     }
@@ -79,7 +79,7 @@ public class Resource {
   private void modifyURI( HashMap<String, String> map ) {
     for ( String alias : map.keySet() ) {
       if ( this.fileURI.contains( alias ) ) {
-        String replacement = this.configuration.lookupAlias( alias );
+        String replacement = this.configuration.lookupScript( alias );
         this.absolutePath = this.fileURI.replace( alias, replacement );
         System.out.println( "The modified fileURI is : " + this.fileURI );
       }
