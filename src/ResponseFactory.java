@@ -30,7 +30,7 @@ public class ResponseFactory {
     }
 
     if(resource.isScript()){
-      return new ScriptResponse( request, resource );
+      return new ScriptResponse( request, resource, this.mimeTypes );
     }
     
     String verb = request.getVerb();

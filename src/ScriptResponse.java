@@ -11,12 +11,17 @@ public class ScriptResponse extends Response {
   private ProcessBuilder processBuilder;
   private Map<String, String> environmentMap;
 
-  public ScriptResponse( Request request, Resource resource ) {
-    super( request, resource );
+  public ScriptResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
+    super( request, resource, mimeTypes );
     processBuilder = new ProcessBuilder( resource.getAbsolutePath() );
     environmentMap = processBuilder.environment();
     setEnvironmentVariables( request, environmentMap );
     executeScript( request, processBuilder );
+  }
+
+  @Override
+  void send( OutputStream out ) {
+
   }
 
   private void executeScript( Request request, ProcessBuilder processBuilder ) {
