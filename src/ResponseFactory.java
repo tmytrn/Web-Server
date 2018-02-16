@@ -6,7 +6,7 @@ public class ResponseFactory {
   MimeTypes mimeTypes;
   Htaccess htAccess;
 
-  public ResponseFactory( Request request, Resource resource , MimeTypes mimeTypes) {
+  public ResponseFactory( Request request, Resource resource, MimeTypes mimeTypes ) {
     this.request = request;
     this.resource = resource;
     this.mimeTypes = mimeTypes;
@@ -21,30 +21,31 @@ public class ResponseFactory {
 //        return new UnauthorizedResponse( request,resource );
 //      }
 //    }
+    
+    if ( !new File( resource.getAbsolutePath() ).exists() ) {
+      System.out.println( resource.getAbsolutePath() + "        path doesn't exist" );
+      return new NotFoundResponse( request, resource, this.mimeTypes );
+    } else if ( resource.isScript() ) {
 
-    //check authorization
-//    if ( !new File( resource.getAbsolutePath() ).exists() ) {
-//      //return new NotFoundResponse( request, resource );
-//    }
-//    else if ( resource.isScript() ) {
-//      //execute script
-//
-//    }
+    }
+
     if(resource.isScript()){
       return new ScriptResponse( request, resource );
     }
+    
     String verb = request.getVerb();
     switch ( verb ) {
       case "GET":
-        return new GetResponse( request, resource, mimeTypes );
+        Response getResponse = new GetResponse( request, resource, this.mimeTypes );
+        return getResponse;
       case "HEAD":
-        return new HeadResponse( request, resource);
+        return new HeadResponse( request, resource, this.mimeTypes );
       case "POST":
-        return new PostResponse( request, resource );
+        return new PostResponse( request, resource, this.mimeTypes );
       case "PUT":
-        return new PutResponse( request, resource );
+        return new PutResponse( request, resource, this.mimeTypes );
       case "DELETE":
-        return new DeleteResponse( request, resource );
+        return new DeleteResponse( request, resource, this.mimeTypes );
     }
 
     return null;
