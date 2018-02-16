@@ -164,9 +164,7 @@ public class Request {
   public String getQueryString(){
     return this.queryString;
   }
-  public HashMap<String, String> getHeaders(){
-    return this.headers;
-  }
+
   public String getUri( ) {
     return this.uri;
   }
