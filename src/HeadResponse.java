@@ -1,4 +1,4 @@
-import java.io.OutputStream;
+import java.io.*;
 
 public class HeadResponse extends Response {
   
@@ -8,8 +8,17 @@ public class HeadResponse extends Response {
     this.setReasonPhrase( "OK" );
   }
 
-  @Override
-  void send( OutputStream out ) {
-
+  public void send( OutputStream out ) {
+    String response = this.createHeaders();
+    try {
+      String res = new String( response.getBytes() );
+      System.out.println( res );
+      out.write( response.getBytes() );
+      out.flush();
+      out.close();
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
   }
+
 }

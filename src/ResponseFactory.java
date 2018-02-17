@@ -26,10 +26,6 @@ public class ResponseFactory {
       System.out.println( resource.getAbsolutePath() + "        path doesn't exist" );
       return new NotFoundResponse( request, resource, this.mimeTypes );
     } else if ( resource.isScript() ) {
-
-    }
-
-    if(resource.isScript()){
       return new ScriptResponse( request, resource, this.mimeTypes );
     }
     
