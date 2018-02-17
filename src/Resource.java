@@ -10,6 +10,8 @@ public class Resource {
   private String htAccessLocation;
   private boolean isScriptAlias;
   private boolean isAlias;
+  private long lastModified;
+  private Date lastModifiedDate;
 
   public Resource( String uri, HttpdConf conf ) {
     this.configuration = conf;
@@ -18,6 +20,8 @@ public class Resource {
     this.isScriptAlias = this.uriContains( this.configuration.getScriptAliasMap() );
     this.absolutePath = absolutePath();
     this.document = new File( this.absolutePath );
+    this.lastModified = this.document.lastModified();
+    this.lastModifiedDate = new Date( this.lastModified );
   }
 
   public String absolutePath( ) {
@@ -100,6 +104,14 @@ public class Resource {
 
   public String getHtAccessLocation(){
     return this.htAccessLocation;
+  }
+
+  public long getLastModified(){
+    return this.lastModified;
+  }
+
+  public Date getLastModifiedDate(){
+    return this.lastModifiedDate;
   }
 
 }

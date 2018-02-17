@@ -28,10 +28,17 @@ public abstract class Response {
 
   private void putResourceHeaders( ) {
     File content = this.getResource().getFile();
+
+    if(content != null) {
+      this.getResponseHeaders().put( "Last-Modified", getLastModifiedDate( content ) );
+      this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
+      this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
+    }
+  }
+
+  private String getLastModifiedDate(File file){
     SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
-    this.getResponseHeaders().put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
-    this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
-    this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
+    return fileDateFormat.format( file.lastModified() ) + "GMT";
   }
 
   private String getMimeType( File file ) {
