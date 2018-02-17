@@ -1,3 +1,5 @@
+import sun.java2d.pipe.SpanShapeRenderer;
+
 import java.io.*;
 import java.text.*;
 import java.time.*;
@@ -18,7 +20,6 @@ public abstract class Response {
     this.mimeTypes = mimeTypes;
     this.responseHeaders = new HashMap();
     this.putDefaultHeaders();
-    this.putResourceHeaders();
   }
 
   public void putDefaultHeaders( ) {
@@ -28,8 +29,8 @@ public abstract class Response {
 
   private void putResourceHeaders( ) {
     File content = this.getResource().getFile();
-    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
-    this.getResponseHeaders().put( "Last Modified", fileDateFormat.format( content.lastModified() ) + "GMT" );
+    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
+    this.getResponseHeaders().put( "Last-Modified", fileDateFormat.format( content.lastModified() ) );
     this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
     this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
   }
@@ -37,12 +38,18 @@ public abstract class Response {
   private String getMimeType( File file ) {
     String fileName = file.getName();
     String[] type = fileName.split( "\\." );
-    return mimeTypes.lookup( type[type.length - 1] );
+
+    if( mimeTypes.lookup( type[type.length - 1] ) != null) {
+      return mimeTypes.lookup( type[type.length - 1] );
+    }
+
+    return "text/text";
   }
 
   public String getDate( ) {
-    ZonedDateTime httpDate = ZonedDateTime.now( ZoneOffset.UTC );
-    return httpDate.format( DateTimeFormatter.ofPattern( "EEE, dd MMM yyyy HH:mm:ss " ) ) + "GMT";
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
+    return dateFormat.format( calendar.getTime());
   }
 
   abstract void send( OutputStream out );

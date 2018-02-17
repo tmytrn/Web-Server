@@ -80,9 +80,7 @@ public class Request {
 
   private void parseFirstLine( ) throws IOException, BadRequest {
     String[] lineSplit = this.inputStreamReader.readLine().split( " " );
-
     if ( isFirstLineOfRequest( lineSplit ) ) {
-
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
     }else{
       throw new BadRequest( "Bad Request" );

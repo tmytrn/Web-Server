@@ -28,8 +28,7 @@ public class Resource {
     } else {
       this.addDocumentRootToTheStartOfURI();
     }
-
-    if ( !isFile() ) {
+    if ( isDirectory() ) {
       this.appendDirectoryIndexToURI();
     }
 
@@ -50,8 +49,8 @@ public class Resource {
     return this.absolutePath;
   }
 
-  private boolean isFile( ) {
-    return new File( this.absolutePath ).isFile();
+  private boolean isDirectory( ) {
+    return new File( this.absolutePath ).isDirectory();
   }
 
   public boolean isScript( ) {

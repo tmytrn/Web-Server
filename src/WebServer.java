@@ -35,8 +35,8 @@ public class WebServer {
         System.out.println( "Request Number is: " + ++numberOfRequests );
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
         worker.run();
-//        Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
-//        thread.start();
+//      Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
+//       thread.start();
       }
 
     } catch ( Exception e ) {

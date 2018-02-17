@@ -24,7 +24,7 @@ public class Worker implements Runnable {
       Response response = responseMaker.getResponse( request, resource);
       response.send(client.getOutputStream());
 
-//      System.out.println( "resource and request made" );
+      System.out.println( "resource and request made" );
 
       //create response
       //send response back to stream
