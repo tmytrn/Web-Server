@@ -99,7 +99,9 @@ public abstract class Response {
   public Calendar getCalendar(){
     return this.calendar;
   }
-
+  public void setContentLength(int length){
+    this.contentLength = length;
+  }
   public MimeTypes getMimeTypes( ) {
     return this.mimeTypes;
   }
