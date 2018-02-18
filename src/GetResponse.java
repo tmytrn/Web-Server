@@ -1,12 +1,7 @@
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.text.*;
 import java.util.*;
-import java.util.Locale;
-import java.util.TimeZone;
+
 
 public class GetResponse extends Response {
 
@@ -38,7 +33,7 @@ public class GetResponse extends Response {
 
   private void putResourceHeaders( ) {
     File content = this.getResource().getFile();
-
+    setContentLength((int) content.length() );
     if(content != null) {
       this.getResponseHeaders().put( "Last-Modified", getLastModifiedDate( content ) );
       this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
