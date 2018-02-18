@@ -149,6 +149,7 @@ public class Request {
       e.printStackTrace();
     }
   }
+
   private boolean hasQueryString(String uri){
     String [] uriDissect = uri.split( "\\?" );
     return (uriDissect.length > 1);
