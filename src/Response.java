@@ -27,32 +27,6 @@ public abstract class Response {
     this.responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
   }
 
-  private void putResourceHeaders( ) {
-    File content = this.getResource().getFile();
-    
-    if(content != null) {
-      this.getResponseHeaders().put( "Last-Modified", getLastModifiedDate( content ) );
-      this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
-      this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
-    }
-  }
-
-  private String getLastModifiedDate(File file){
-    SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
-    return fileDateFormat.format( file.lastModified() );
-  }
-
-  private String getMimeType( File file ) {
-    String fileName = file.getName();
-    String[] type = fileName.split( "\\." );
-
-    if( mimeTypes.lookup( type[type.length - 1] ) != null) {
-      return mimeTypes.lookup( type[type.length - 1] );
-    }
-
-    return "text/text";
-  }
-
   public String getDate( ) {
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
@@ -98,12 +72,6 @@ public abstract class Response {
     return this.resource;
   }
 
-//  private String getMimeType(File file){
-//      String fileName = file.getName();
-//      String[] type = fileName.split( "\\." );
-//      return mimeTypes.lookup( type[1] );
-//    }
-
   public Request getRequest(){
     return this.request;
   }
@@ -124,4 +92,7 @@ public abstract class Response {
     this.reasonPhrase = reasonPhrase;
   }
 
+  public MimeTypes getMimeTypes( ) {
+    return this.mimeTypes;
+  }
 }
