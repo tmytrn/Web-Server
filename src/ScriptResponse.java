@@ -21,36 +21,27 @@ public class ScriptResponse extends Response {
     executeScript( request, processBuilder );
   }
 
-
-
   void send( OutputStream out ) {
-    int bodyLength = output.length + errorOutput.length;
     String stringResponse = buildStatusHeader();
-    // + "Content-Length: " + bodyLength + "\n"
-    //+ "Content-Type: text/text; charset=utf-8" + "\r\n"
-
     byte[] byteResponse = stringResponse.getBytes();
-    try{
+
+    try {
       System.out.println( stringResponse );
       out.write( byteResponse );
       out.flush();
       sendResouce( out );
       out.flush();
       out.close();
-    }catch(Exception e){
+    } catch ( Exception e ) {
       e.printStackTrace();
-      //500
     }
-
-
   }
 
-  private String buildStatusHeader(){
-    if(errorOutput != null && output.length > 0){
+  private String buildStatusHeader( ) {
+    if ( errorOutput != null && output.length > 0 ) {
       this.setCode( 200 );
       this.setReasonPhrase( "OK" );
-    }
-    else{
+    } else {
       this.setCode( 500 );
       this.setReasonPhrase( "Internal Server Error" );
     }
@@ -61,11 +52,10 @@ public class ScriptResponse extends Response {
 
   private void sendResouce( OutputStream out ) {
     try {
-      if ( output != null && output.length > 0) {
+      if ( output != null && output.length > 0 ) {
         out.write( output );
         out.flush();
-      }
-      else if ( errorOutput != null  && output.length > 0) {
+      } else if ( errorOutput != null && output.length > 0 ) {
         out.write( errorOutput );
         out.flush();
       }
@@ -80,7 +70,7 @@ public class ScriptResponse extends Response {
     try {
       Process process = processBuilder.start();
       outputStream = process.getOutputStream();
-      if(request.getBody() != null) {
+      if ( request.getBody() != null ) {
         outputStream.write( request.getBody() );
       }
       process.waitFor();

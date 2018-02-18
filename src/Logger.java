@@ -41,6 +41,7 @@ public class Logger {
     messageBuilder.append(getUser(request));
     messageBuilder.append( " [" + formatDate(response.getCalendar()) + "] " );
     messageBuilder.append( "\"" +request.getFirstLineofRequest()+ "\" ");
+    messageBuilder.append(response.getCode() + " ");
     messageBuilder.append(getContentLength(response) + "\n");
     return messageBuilder.toString();
   }
