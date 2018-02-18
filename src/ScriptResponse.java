@@ -94,7 +94,6 @@ public class ScriptResponse extends Response {
 
   private void processOutput( Process process ) {
     try {
-      process.getInputStream();
       inputStream = process.getInputStream();
       output = new byte[inputStream.available()];
       inputStream.read( output );
