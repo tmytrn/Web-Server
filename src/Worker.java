@@ -27,7 +27,7 @@ public class Worker implements Runnable {
       Response response = responseMaker.getResponse( request, resource);
       response.send(client.getOutputStream());
       Logger log = new Logger(config.lookupConfiguration("LogFile" ));
-      String IPAddress = client.getInetAddress().toString();
+      String IPAddress = client.getInetAddress().getLocalHost().getHostAddress();
       log.write(request, response , IPAddress);
       System.out.println( "resource and request made" );
 
