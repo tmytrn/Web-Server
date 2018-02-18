@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class PostResponse extends Response {
 
@@ -13,11 +11,8 @@ public class PostResponse extends Response {
   public void send( OutputStream out ) {
     String response = this.createHeaders();
     try {
-      String res = new String( response.getBytes() );
-      System.out.println( res );
+      this.appendToFile();
       out.write( response.getBytes() );
-      out.flush();
-      sendResource( out );
       out.flush();
       out.close();
     } catch ( Exception e ) {
@@ -25,17 +20,17 @@ public class PostResponse extends Response {
     }
   }
 
-  private void sendResource( OutputStream out ) { // made into buffered output stream
-    File file = this.getResource().getFile();
-    byte[] fileBytes = new byte[( int ) file.length()];
+  public void appendToFile(){
     try {
-      FileInputStream fileToArray = new FileInputStream( file );
-      fileToArray.read( fileBytes );
-      out.write( fileBytes );
-    } catch ( Exception e ) {
+      FileOutputStream fileOutputStream = new FileOutputStream( this.getResource().getFile() , true );
+      fileOutputStream.write( this.getRequestBody() );
+      fileOutputStream.flush();
+      fileOutputStream.close();
+    }
+    catch(Exception e){
       e.printStackTrace();
     }
-  }
 
+  }
 
 }
