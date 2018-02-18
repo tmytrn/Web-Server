@@ -143,7 +143,6 @@ public class Request {
         this.body[bodyIndex] = (byte) this.inputStreamReader.read();
 
       }
-      System.out.println(new String(this.body));
 
     } catch ( IOException e ) {
       e.printStackTrace();

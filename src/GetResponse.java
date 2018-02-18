@@ -33,7 +33,8 @@ public class GetResponse extends Response {
 
   private void putResourceHeaders( ) {
     File content = this.getResource().getFile();
-    setContentLength((int) content.length() );
+    setContentLength( (int)content.length() );
+
     if(content != null) {
       this.getResponseHeaders().put( "Last-Modified", getLastModifiedDate( content ) );
       this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
