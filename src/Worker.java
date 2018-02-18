@@ -1,3 +1,6 @@
+import sun.rmi.log.ReliableLog;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
@@ -23,7 +26,9 @@ public class Worker implements Runnable {
       ResponseFactory responseMaker = new ResponseFactory(request, resource, this.mimes);
       Response response = responseMaker.getResponse( request, resource);
       response.send(client.getOutputStream());
-
+      Logger log = new Logger(config.lookupConfiguration("LogFile" ));
+      String IPAddress = client.getInetAddress().toString();
+      log.write(request, response , IPAddress);
       System.out.println( "resource and request made" );
 
       //create response

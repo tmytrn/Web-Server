@@ -8,11 +8,13 @@ import java.util.*;
 
 public abstract class Response {
   private int code;
+  private int contentLength;
   private String reasonPhrase;
   private Resource resource;
   private Request request;
   private MimeTypes mimeTypes;
   private HashMap<String, String> responseHeaders;
+  private Calendar calendar;
 
   public Response( Request request, Resource resource, MimeTypes mimeTypes ) {
     this.request = request;
@@ -28,7 +30,7 @@ public abstract class Response {
   }
 
   public String getDate( ) {
-    Calendar calendar = Calendar.getInstance();
+    calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
     return dateFormat.format( calendar.getTime());
   }
@@ -90,6 +92,12 @@ public abstract class Response {
 
   public void setReasonPhrase( String reasonPhrase ) {
     this.reasonPhrase = reasonPhrase;
+  }
+  public int getContentLength(){
+    return this.contentLength;
+  }
+  public Calendar getCalendar(){
+    return this.calendar;
   }
 
   public MimeTypes getMimeTypes( ) {

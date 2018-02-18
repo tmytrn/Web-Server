@@ -159,7 +159,9 @@ public class Request {
     this.queryString = query[1];
     this.uri = query[0];
   }
-
+  public String getFirstLineofRequest(){
+    return this.verb + " " +  this.uri + " " + this.httpVersion;
+  }
   public String getQueryString(){
     return this.queryString;
   }
