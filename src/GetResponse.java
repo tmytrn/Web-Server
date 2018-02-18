@@ -14,7 +14,6 @@ public class GetResponse extends Response {
     super( request, resource, mimeTypes );
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
-
     this.putResourceHeaders();
     this.changeResponseIfResourcedCached();
   }
