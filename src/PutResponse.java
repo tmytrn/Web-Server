@@ -6,7 +6,7 @@ public class PutResponse extends Response {
   public PutResponse(Request request, Resource resource, MimeTypes mimeTypes){
     super(request, resource, mimeTypes);
     File filePath = new File(resource.absolutePath());
-      createResource(filePath);
+    createResource(filePath);
   }
 
   void send( OutputStream out ) {
