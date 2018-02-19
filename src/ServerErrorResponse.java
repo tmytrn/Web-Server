@@ -4,12 +4,11 @@ public class ServerErrorResponse extends Response {
   public ServerErrorResponse() {
     super();
     this.setCode( 500 );
-    this.setReasonPhrase( "Server Error" );
+    this.setReasonPhrase( "Internal Server Error" );
   }
 
-  @Override
   public void send( OutputStream out ) {
-    String response = this.createHeaders();
+    String response = this.createDefaultHeaders();
 
     try {
       out.write( response.getBytes() );
@@ -18,6 +17,25 @@ public class ServerErrorResponse extends Response {
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+  }
+
+  public String createDefaultHeaders(){
+    StringBuilder headers = new StringBuilder();
+    headers.append( this.getCode() ).
+        append( " " ).
+        append( this.getReasonPhrase() ).
+        append( "\n" ).
+        append( "Server" ).
+        append( ": " ).
+        append( this.getResponseHeaders().get( "Server" ) ).
+        append( "\n" ).
+        append( "Date" ).
+        append( ": " ).
+        append( this.getResponseHeaders().get( "Date" ) ).
+        append( "\r\n" );
+
+    return headers.toString();
+
   }
 
 }

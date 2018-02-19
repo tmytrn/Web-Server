@@ -38,11 +38,13 @@ public abstract class Response {
 
   public String createHeaders( ) {
     StringBuilder headers = new StringBuilder();
-    headers.append( firstHeadersLine() );
+
+    headers.append( this.firstHeadersLine() );
     for ( String key : this.responseHeaders.keySet() ) {
       headers.append( key ).append( ": " ).append( this.responseHeaders.get( key ) ).append( "\n" );
     }
     headers.append( "\r\n" );
+
     return headers.toString();
   }
 
@@ -52,11 +54,6 @@ public abstract class Response {
 
   public int getCode(){
     return this.code;
-  }
-
-  private boolean sendingFile() {
-    String verb = request.getVerb();
-    return verb.equals( "GET" );
   }
 
   public String getReasonPhrase(){

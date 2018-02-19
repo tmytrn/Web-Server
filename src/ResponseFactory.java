@@ -78,4 +78,8 @@ public class ResponseFactory {
     return new ServerErrorResponse();
   }
 
+  public Response getBadRequestResponse(){
+    return new BadRequestResponse();
+  }
+
 }

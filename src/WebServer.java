@@ -55,7 +55,11 @@ public class WebServer {
   }
 
   public static void main( String[] args ) {
-    WebServer webServer = new WebServer();
-    webServer.start();
+//    WebServer webServer = new WebServer();
+//    webServer.start();
+
+//    BadRequestResponse badRequestResponse = new BadRequestResponse();
+//    System.out.println( badRequestResponse.createDefaultHeaders() );
+
   }
 }
