@@ -96,26 +96,30 @@ public class ScriptResponse extends Response {
   }
 
   private void processOutput( Process process ) {
+
     try {
-      inputStream = process.getInputStream();
-      output = new byte[inputStream.available()];
-      inputStream.read( output );
+      this.inputStream = process.getInputStream();
+      this.output = new byte[this.inputStream.available()];
+      this.inputStream.read( this.output );
     } catch ( Exception e ) {
       e.printStackTrace();
       this.sendServerErrorResponse( this.outputStream );
     }
+
   }
 
   private void processErrorOutput( Process process ) {
+
     try {
       process.getErrorStream();
-      errorStream = process.getInputStream();
-      errorOutput = new byte[errorStream.available()];
-      errorStream.read( errorOutput );
+      this.errorStream = process.getInputStream();
+      this.errorOutput = new byte[this.errorStream.available()];
+      this.errorStream.read( this.errorOutput );
     } catch ( Exception e ) {
       e.printStackTrace();
       this.sendServerErrorResponse( this.outputStream );
     }
+
   }
 
   private void setEnvironmentVariables( Request request, Map<String, String> environmentMap ) {

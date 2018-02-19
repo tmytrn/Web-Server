@@ -1,13 +1,13 @@
 import java.io.File;
 
 public class ResponseFactory {
+
   private Request request;
   private Resource resource;
   private MimeTypes mimeTypes;
   private Htaccess htAccess;
 
-  public ResponseFactory() {
-
+  public ResponseFactory( ) {
   }
 
   public Response getResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
@@ -19,16 +19,17 @@ public class ResponseFactory {
     Response protectedResponse = this.checkIfResourceIsProtected();
     Response scriptResponse = this.checkIfScriptResponse();
 
-    if(protectedResponse != null){
+    if ( protectedResponse != null ) {
       return protectedResponse;
-    } else if(scriptResponse != null){
+    } else if ( scriptResponse != null ) {
       return scriptResponse;
     }
+
     return this.performVerbResponse();
 
   }
 
-  private Response checkIfResourceIsProtected(){
+  private Response checkIfResourceIsProtected( ) {
 
     if ( this.resource.isProtected() ) {
       this.htAccess = new Htaccess( this.resource.getHtAccessLocation() );
@@ -48,7 +49,7 @@ public class ResponseFactory {
     return null;
   }
 
-  private Response checkIfScriptResponse(){
+  private Response checkIfScriptResponse( ) {
 
     if ( !new File( resource.getAbsolutePath() ).exists() &&
         !this.request.getVerb().equals( "PUT" ) ) {
@@ -61,7 +62,7 @@ public class ResponseFactory {
 
   }
 
-  private Response performVerbResponse(){
+  private Response performVerbResponse( ) {
 
     switch ( this.request.getVerb() ) {
       case "GET":
@@ -80,13 +81,13 @@ public class ResponseFactory {
 
   }
 
-  public Response getServerErrorResponse(){
+  public Response getServerErrorResponse( ) {
 
     return new ServerErrorResponse();
 
   }
 
-  public Response getBadRequestResponse(){
+  public Response getBadRequestResponse( ) {
 
     return new BadRequestResponse();
 

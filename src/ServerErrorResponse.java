@@ -1,13 +1,17 @@
 import java.io.OutputStream;
 
 public class ServerErrorResponse extends Response {
+
   public ServerErrorResponse() {
+
     super();
     this.setCode( 500 );
     this.setReasonPhrase( "Internal Server Error" );
+
   }
 
   public void send( OutputStream out ) {
+
     String response = this.createDefaultHeaders();
 
     try {
@@ -17,9 +21,11 @@ public class ServerErrorResponse extends Response {
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+
   }
 
   public String createDefaultHeaders(){
+
     StringBuilder headers = new StringBuilder();
     headers.append( this.getCode() ).
         append( " " ).
