@@ -8,7 +8,7 @@ public class BadRequestResponse extends Response {
   }
 
   @Override
-  void send( OutputStream out ) {
+  public void send( OutputStream out ) {
 
   }
 }

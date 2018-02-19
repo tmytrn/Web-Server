@@ -9,7 +9,7 @@ public class PutResponse extends Response {
     createResource(filePath);
   }
 
-  void send( OutputStream out ) {
+  public void send( OutputStream out ) {
     String response = this.createHeaders();
     try {
       String res = new String( response.getBytes() );

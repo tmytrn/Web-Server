@@ -1,9 +1,5 @@
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.io.*;
 import java.text.*;
-import java.time.*;
-import java.time.format.*;
 import java.util.*;
 
 public abstract class Response {
@@ -35,7 +31,7 @@ public abstract class Response {
     return dateFormat.format( calendar.getTime());
   }
 
-  abstract void send( OutputStream out );
+  public abstract void send( OutputStream out );
 
   public String createHeaders( ) {
     StringBuilder headers = new StringBuilder();
@@ -50,12 +46,6 @@ public abstract class Response {
   public String firstHeadersLine( ) {
     return this.request.getHttpVersion() + " " + this.code + " " + this.reasonPhrase + "\n";
   }
-
-//  public String getLogDate( ) {
-//    SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MMM/yyyy hh:mm:ss Z" );
-//    String date = dateFormat.format( new Date() );
-//    return date;
-//  }
 
   public int getCode(){
     return this.code;
