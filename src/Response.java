@@ -105,7 +105,5 @@ public abstract class Response {
   public MimeTypes getMimeTypes( ) {
     return this.mimeTypes;
   }
-  public void setContentLength(int length){
-    this.contentLength = length;
-  }
+
 }
