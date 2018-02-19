@@ -21,7 +21,7 @@ public class ScriptResponse extends Response {
     executeScript( request, processBuilder );
   }
 
-  void send( OutputStream out ) {
+  public void send( OutputStream out ) {
     String stringResponse = buildStatusHeader();
     byte[] byteResponse = stringResponse.getBytes();
 

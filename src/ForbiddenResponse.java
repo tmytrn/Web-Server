@@ -8,7 +8,14 @@ public class ForbiddenResponse extends Response{
   }
 
   @Override
-  void send( OutputStream out ) {
-
+  public void send( OutputStream out ) {
+    String response = this.firstHeadersLine();
+    try {
+      out.write( response.getBytes() );
+      out.flush();
+      out.close();
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
   }
 }

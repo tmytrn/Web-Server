@@ -13,14 +13,20 @@ public class ResponseFactory {
   }
 
   public Response getResponse( Request request, Resource resource ) {
-    //    if(this.resource.isProtected()){
-//      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
-//
-//      System.out.println( this.request.lookup( "Authorization" ) );
-//      if(this.request.lookup( "Authorization" ) == null){
-//        return new UnauthorizedResponse( request,resource );
-//      }
-//    }
+    if(this.resource.isProtected()){
+      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
+
+      System.out.println( this.request.lookup( "Authorization" ) );
+      if(this.request.lookup( "Authorization" ) == null){
+        return new UnauthorizedResponse( request,resource, this.mimeTypes );
+      }
+      String authInfo = this.request.lookup( "Authorization" );
+      String[] credentials = authInfo.split( " " );
+      if(!this.htAccess.isAuthorized( credentials[1] )){
+        return new ForbiddenResponse( request,resource,this.mimeTypes );
+      }
+    }
+
     String verb = request.getVerb();
     if ( !new File( resource.getAbsolutePath() ).exists()  && !verb.equals( "PUT" )) {
       System.out.println( resource.getAbsolutePath() + "        path doesn't exist" );

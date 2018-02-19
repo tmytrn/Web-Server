@@ -9,7 +9,7 @@ public class DeleteResponse extends Response {
   }
 
   @Override
-  void send( OutputStream out ) {
+  public void send( OutputStream out ) {
     String response = this.createHeaders();
     try {
       String res = new String( response.getBytes() );
