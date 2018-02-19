@@ -5,8 +5,11 @@ import java.util.*;
 
 public class GetResponse extends Response {
 
+  private MimeTypes mimeTypes;
+
   public GetResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
-    super( request, resource, mimeTypes );
+    super( request, resource);
+    this.mimeTypes = mimeTypes;
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
     this.putResourceHeaders();
@@ -51,8 +54,8 @@ public class GetResponse extends Response {
     String fileName = file.getName();
     String[] type = fileName.split( "\\." );
 
-    if( this.getMimeTypes().lookup( type[type.length - 1] ) != null) {
-      return this.getMimeTypes().lookup( type[type.length - 1] );
+    if( this.mimeTypes.lookup( type[type.length - 1] ) != null) {
+      return this.mimeTypes.lookup( type[type.length - 1] );
     }
 
     return "text/text";

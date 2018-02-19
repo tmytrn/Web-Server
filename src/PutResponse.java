@@ -3,8 +3,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public class PutResponse extends Response {
-  public PutResponse(Request request, Resource resource, MimeTypes mimeTypes){
-    super(request, resource, mimeTypes);
+  public PutResponse(Request request, Resource resource){
+    super(request, resource);
     File filePath = new File(resource.absolutePath());
     createResource(filePath);
   }

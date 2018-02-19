@@ -2,8 +2,8 @@ import java.io.*;
 
 public class PostResponse extends Response {
 
-  public PostResponse(Request request, Resource resource, MimeTypes mimeTypes){
-    super(request, resource, mimeTypes);
+  public PostResponse(Request request, Resource resource){
+    super(request, resource);
     this.setCode(200);
     this.setReasonPhrase("OK" );
   }

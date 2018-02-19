@@ -2,8 +2,8 @@ import java.io.File;
 import java.io.OutputStream;
 
 public class DeleteResponse extends Response {
-  public DeleteResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
-    super( request, resource, mimeTypes );
+  public DeleteResponse( Request request, Resource resource ) {
+    super( request, resource );
     File fileToDelete = new File(resource.getAbsolutePath());
     deleteFile( fileToDelete );
   }

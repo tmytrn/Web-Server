@@ -1,8 +1,8 @@
 import java.io.OutputStream;
 
 public class NotFoundResponse extends Response {
-  public NotFoundResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
-    super( request, resource, mimeTypes );
+  public NotFoundResponse( Request request, Resource resource ) {
+    super( request, resource );
     this.setCode( 404 );
     this.setReasonPhrase( "Not Found" );
   }

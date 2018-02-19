@@ -15,12 +15,16 @@ public class WebServer {
     this.configuration = new HttpdConf( HTTPDCONFPATH );
     this.mimeTypes = new MimeTypes( MIMETYPESPATH );
     this.loadConfigurationFiles();
-    this.listenToPort();
+
   }
 
   public void loadConfigurationFiles( ) {
     this.configuration.load();
     this.mimeTypes.load();
+  }
+
+  public void start(){
+    this.listenToPort();
   }
 
   public void listenToPort( ) {
@@ -32,7 +36,6 @@ public class WebServer {
       this.socket = new ServerSocket( portNumber );
       while ( true ) {
         client = this.socket.accept();
-        System.out.println( "Request Number is: " + ++numberOfRequests );
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
         worker.run();
 //       Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
@@ -46,8 +49,6 @@ public class WebServer {
 
   public static void main( String[] args ) {
     WebServer webServer = new WebServer();
-//    Htaccess htaccess = new Htaccess( "/Users/niszeto/IdeaProjects/web-server-lookin-like-a-snack/src/public_html/.htaccess" );
-//    System.out.println( htaccess.isAuthorized( "YWxhZGRpbjpvcGVuc2VzYW1l" ) );
-
+    webServer.start();
   }
 }
