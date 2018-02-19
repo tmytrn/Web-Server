@@ -10,13 +10,10 @@ public class Htpassword extends ConfigurationReader {
 
   public Htpassword( String filename ) throws IOException {
     super( filename );
-    System.out.println( "Password file: " + filename );
-
-    this.passwords = new HashMap<String, String>();
+    this.passwords = new HashMap<>();
     this.load();
   }
 
-  @Override
   public void load( ) {
     while ( this.hasMoreLines() ) {
       this.parseLine( this.getCurrentLine() );
@@ -33,24 +30,17 @@ public class Htpassword extends ConfigurationReader {
   }
 
   public boolean isAuthorized( String authInfo ) {
-    // authInfo is provided in the header received from the client
-    // as a Base64 encoded string.
     String credentials = new String(
         Base64.getDecoder().decode( authInfo ),
         Charset.forName( "UTF-8" )
     );
 
-    // The string is the key:value pair username:password
     String[] tokens = credentials.split( ":" );
-    // TODO: implement this
+
     return verifyPassword( tokens[0], tokens[1] );
   }
 
   private boolean verifyPassword( String username, String password ) {
-    // encrypt the password, and compare it to the password stored
-    // in the password file (keyed by username)
-    // TODO: implement this - note that the encryption step is provided as a
-    // method, below
     if(this.passwords.containsKey( username )) {
       return this.passwords.get( username ).equals( this.encryptClearPassword( password ) );
     }
@@ -59,8 +49,6 @@ public class Htpassword extends ConfigurationReader {
   }
 
   private String encryptClearPassword( String password ) {
-    // Encrypt the cleartext password (that was decoded from the Base64 String
-    // provided by the client) using the SHA-1 encryption algorithm
     try {
       MessageDigest mDigest = MessageDigest.getInstance( "SHA-1" );
       byte[] result = mDigest.digest( password.getBytes() );

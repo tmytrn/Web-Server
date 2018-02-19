@@ -11,6 +11,11 @@ public abstract class Response {
   private HashMap<String, String> responseHeaders;
   private Calendar calendar;
 
+  public Response(){
+    this.responseHeaders = new HashMap();
+    this.putDefaultHeaders();
+  }
+
   public Response( Request request, Resource resource) {
     this.request = request;
     this.resource = resource;

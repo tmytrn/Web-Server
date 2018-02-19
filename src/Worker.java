@@ -22,11 +22,11 @@ public class Worker implements Runnable {
       Request request = new Request( this.client.getInputStream() );
       Resource resource = new Resource( request.getUri(), this.config );
       ResponseFactory responseMaker = new ResponseFactory();
-      Response response = responseMaker.getResponse( request, resource, this.mimes);
-      response.send(client.getOutputStream());
-      Logger log = new Logger(config.lookupConfiguration("LogFile" ));
-      String IPAddress = client.getInetAddress().getLocalHost().getHostAddress();
-      log.write(request, response , IPAddress);
+      Response response = responseMaker.getResponse( request, resource, this.mimes );
+      response.send( this.client.getOutputStream() );
+      Logger log = new Logger( this.config.lookupConfiguration( "LogFile" ) );
+      String IPAddress = this.client.getInetAddress().getLocalHost().getHostAddress();
+      log.write( request, response, IPAddress );
       this.client.close();
     } catch ( Exception e ) {
       e.printStackTrace();

@@ -70,8 +70,12 @@ public class ResponseFactory {
       case "DELETE":
         return new DeleteResponse( request, resource );
       default:
-        return new ServerErrorResponse( request, resource );
+        return new ServerErrorResponse();
     }
+  }
+
+  public Response getServerErrorResponse(){
+    return new ServerErrorResponse();
   }
 
 }
