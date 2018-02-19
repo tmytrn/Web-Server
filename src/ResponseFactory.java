@@ -1,46 +1,68 @@
 import java.io.File;
 
 public class ResponseFactory {
-  Request request;
-  Resource resource;
-  MimeTypes mimeTypes;
-  Htaccess htAccess;
+  private Request request;
+  private Resource resource;
+  private MimeTypes mimeTypes;
+  private Htaccess htAccess;
 
-  public ResponseFactory( Request request, Resource resource, MimeTypes mimeTypes ) {
+  public ResponseFactory() {
+
+  }
+
+  public Response getResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
     this.request = request;
     this.resource = resource;
     this.mimeTypes = mimeTypes;
+
+    Response protectedResponse = this.checkIfResourceIsProtected();
+    Response scriptResponse = this.checkIfScriptResponse();
+
+    if(protectedResponse != null){
+      return protectedResponse;
+    } else if(scriptResponse != null){
+      return scriptResponse;
+    }
+    return this.performVerbResponse();
+
   }
 
-  public Response getResponse( Request request, Resource resource ) {
+  private Response checkIfResourceIsProtected(){
     if ( this.resource.isProtected() ) {
-      this.htAccess = new Htaccess( resource.getHtAccessLocation() );
+      this.htAccess = new Htaccess( this.resource.getHtAccessLocation() );
 
-      System.out.println( this.request.lookup( "Authorization" ) );
       if ( this.request.lookup( "Authorization" ) == null ) {
-        return new UnauthorizedResponse( request, resource );
+        return new UnauthorizedResponse( this.request, this.resource );
       }
-      String authInfo = this.request.lookup( "Authorization" );
-      String[] credentials = authInfo.split( " " );
+
+      String authorizationInformation = this.request.lookup( "Authorization" );
+      String[] credentials = authorizationInformation.split( " " );
+
       if ( !this.htAccess.isAuthorized( credentials[1] ) ) {
-        return new ForbiddenResponse( request, resource );
+        return new ForbiddenResponse( this.request, this.resource );
       }
     }
 
-    String verb = request.getVerb();
-    if ( !new File( resource.getAbsolutePath() ).exists() && !verb.equals( "PUT" ) ) {
-      System.out.println( resource.getAbsolutePath() + "        path doesn't exist" );
+    return null;
+  }
+
+  private Response checkIfScriptResponse(){
+    if ( !new File( resource.getAbsolutePath() ).exists() &&
+        !this.request.getVerb().equals( "PUT" ) ) {
       return new NotFoundResponse( request, resource );
     } else if ( resource.isScript() ) {
       return new ScriptResponse( request, resource );
     }
 
+    return null;
+  }
 
-    switch ( verb ) {
+  private Response performVerbResponse(){
+    switch ( this.request.getVerb() ) {
       case "GET":
-        return new GetResponse( request, resource, this.mimeTypes );
+        return new GetResponse( request, resource, mimeTypes );
       case "HEAD":
-        return new HeadResponse( request, resource, this.mimeTypes );
+        return new HeadResponse( request, resource, mimeTypes );
       case "POST":
         return new PostResponse( request, resource );
       case "PUT":
@@ -50,10 +72,6 @@ public class ResponseFactory {
       default:
         return new ServerErrorResponse( request, resource );
     }
-  }
-
-  public Response getServerErrorResponse( ) {
-    return new ServerErrorResponse( this.request, this.resource );
   }
 
 }

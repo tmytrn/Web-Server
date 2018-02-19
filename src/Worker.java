@@ -17,23 +17,16 @@ public class Worker implements Runnable {
   }
 
   public void run( ) {
-    Request request;
-    Resource resource;
 
     try {
-      request = new Request( this.client.getInputStream() );
-      resource = new Resource( request.getUri(), this.config );
-      ResponseFactory responseMaker = new ResponseFactory(request, resource, this.mimes);
-      Response response = responseMaker.getResponse( request, resource);
+      Request request = new Request( this.client.getInputStream() );
+      Resource resource = new Resource( request.getUri(), this.config );
+      ResponseFactory responseMaker = new ResponseFactory();
+      Response response = responseMaker.getResponse( request, resource, this.mimes);
       response.send(client.getOutputStream());
       Logger log = new Logger(config.lookupConfiguration("LogFile" ));
       String IPAddress = client.getInetAddress().getLocalHost().getHostAddress();
       log.write(request, response , IPAddress);
-      System.out.println( "resource and request made" );
-
-      //create response
-      //send response back to stream
-
       this.client.close();
     } catch ( Exception e ) {
       e.printStackTrace();
