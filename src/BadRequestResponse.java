@@ -21,6 +21,7 @@ public class BadRequestResponse extends Response {
 
   public String createDefaultHeaders(){
     StringBuilder headers = new StringBuilder();
+
     headers.append( this.getCode() ).
         append( " " ).
         append( this.getReasonPhrase() ).

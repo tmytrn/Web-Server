@@ -3,17 +3,20 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public class PutResponse extends Response {
+
   public PutResponse(Request request, Resource resource){
+
     super(request, resource);
     File filePath = new File(resource.absolutePath());
     createResource(filePath);
+
   }
 
   public void send( OutputStream out ) {
+
     String response = this.createHeaders();
+
     try {
-      String res = new String( response.getBytes() );
-      System.out.println( res );
       out.write( response.getBytes() );
       out.flush();
     } catch ( Exception e ) {

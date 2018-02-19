@@ -96,4 +96,12 @@ public abstract class Response {
     this.contentLength = length;
   }
 
+  public void sendServerErrorResponse(OutputStream outputStream){
+
+    ResponseFactory responseFactory = new ResponseFactory();
+    Response serverErrorResponse = responseFactory.getServerErrorResponse();
+    serverErrorResponse.send( outputStream );
+
+  }
+
 }

@@ -29,33 +29,13 @@ public class Request {
     }
   };
 
-  public Request( String test ) {
-    this.headers = new HashMap<>();
-
-    StringTokenizer tokenizer = new StringTokenizer( test, "\n" );
-    String currentLine;
-    String[] currentLineSplit;
-
-    while ( tokenizer.hasMoreTokens() ) {
-      currentLine = tokenizer.nextToken();
-      currentLineSplit = currentLine.split( " " );
-
-      if ( isFirstLineOfRequest( currentLineSplit ) ) {
-        this.setFirstLineOfRequest( currentLineSplit[0], currentLineSplit[1], currentLineSplit[2] );
-      } else if ( currentLine.contains( ": " ) ) {
-        this.parseHeader( currentLine );
-      }
-
-    }
-  }
-
   public Request( InputStream client ) throws BadRequest {
     this.headers = new HashMap<>();
     this.inputStream = client;
     this.inputStreamReader = new BufferedReader( new InputStreamReader( this.inputStream ) );
-    try{
+    try {
       this.parseRequest();
-    } catch ( Exception e ){
+    } catch ( Exception e ) {
       e.printStackTrace();
       throw new BadRequest( "Bad Request" );
     }
@@ -82,7 +62,7 @@ public class Request {
     String[] lineSplit = this.inputStreamReader.readLine().split( " " );
     if ( isFirstLineOfRequest( lineSplit ) ) {
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
-    }else{
+    } else {
       throw new BadRequest( "Bad Request" );
     }
   }
@@ -103,15 +83,12 @@ public class Request {
 
   private void setFirstLineOfRequest( String verb, String uri, String httpVersion ) {
     this.verb = verb;
-    if(hasQueryString( uri )){
+    if ( hasQueryString( uri ) ) {
       parseQueryString( uri );
-    }else {
+    } else {
       this.uri = uri;
     }
     this.httpVersion = httpVersion;
-    System.out.println( "verb is: " + this.verb );
-    System.out.println( "uri is: " + this.uri );
-    System.out.println( "httpVersion is: " + this.httpVersion );
   }
 
   private void parseHeaderSection( ) throws IOException {
@@ -130,7 +107,6 @@ public class Request {
     String[] currentHeader = header.split( ": " );
 
     this.headers.put( currentHeader[0], currentHeader[1] );
-    System.out.println( "header: " + currentHeader[0] + " :  " + currentHeader[1] );
   }
 
   private void parseBodySection( ) {
@@ -139,8 +115,8 @@ public class Request {
 
     try {
 
-      for(int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++){
-        this.body[bodyIndex] = (byte) this.inputStreamReader.read();
+      for ( int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++ ) {
+        this.body[bodyIndex] = ( byte ) this.inputStreamReader.read();
 
       }
 
@@ -149,19 +125,22 @@ public class Request {
     }
   }
 
-  private boolean hasQueryString(String uri){
-    String [] uriDissect = uri.split( "\\?" );
-    return (uriDissect.length > 1);
+  private boolean hasQueryString( String uri ) {
+    String[] uriDissect = uri.split( "\\?" );
+    return ( uriDissect.length > 1 );
   }
-  private void parseQueryString(String uri){
-    String [] query = uri.split( "\\?" );
+
+  private void parseQueryString( String uri ) {
+    String[] query = uri.split( "\\?" );
     this.queryString = query[1];
     this.uri = query[0];
   }
-  public String getFirstLineofRequest(){
-    return this.verb + " " +  this.uri + " " + this.httpVersion;
+
+  public String getFirstLineofRequest( ) {
+    return this.verb + " " + this.uri + " " + this.httpVersion;
   }
-  public String getQueryString(){
+
+  public String getQueryString( ) {
     return this.queryString;
   }
 
@@ -185,7 +164,7 @@ public class Request {
     return this.headers.get( header );
   }
 
-  public HashMap<String, String> getHeaders() {
+  public HashMap<String, String> getHeaders( ) {
     return headers;
   }
 

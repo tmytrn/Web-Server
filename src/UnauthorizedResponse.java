@@ -7,7 +7,6 @@ public class UnauthorizedResponse extends Response{
     this.setReasonPhrase( "Unauthorized" );
   }
 
-  @Override
   public void send( OutputStream out ) {
     String response = this.firstHeadersLine() + getWWWResponseHeader() + "\r\n";
     try {
@@ -20,7 +19,7 @@ public class UnauthorizedResponse extends Response{
   }
 
   private String getWWWResponseHeader(){
-    return "WWW-Authenticate: Basic realm=\"Access to staging site\"";
+    return "WWW-Authenticate: Basic";
   }
 
 

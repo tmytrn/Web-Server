@@ -13,7 +13,7 @@ public class Logger {
   public Logger( String fileName ) {
     this.logFile = new File( fileName );
 
-    if ( !logFile.exists() ) {
+    if ( !this.logFile.exists() ) {
       this.logFile.getParentFile().mkdir();
 
       try {
@@ -29,11 +29,11 @@ public class Logger {
   public void write( Request request, Response response, String IPAddress ) {
 
     try {
-      this.fileWriter = new FileWriter( logFile, true );
-      bufferedWriter = new BufferedWriter( fileWriter );
+      this.fileWriter = new FileWriter( this.logFile, true );
+      this.bufferedWriter = new BufferedWriter( this.fileWriter );
       String message = getLogMessage( request, response, IPAddress );
-      bufferedWriter.append( message );
-      bufferedWriter.close();
+      this.bufferedWriter.append( message );
+      this.bufferedWriter.close();
     } catch ( Exception e ) {
       e.printStackTrace();
     }
@@ -43,11 +43,20 @@ public class Logger {
   private String getLogMessage( Request request, Response response, String IPAddress ) {
 
     StringBuilder messageBuilder = new StringBuilder();
-    messageBuilder.append( IPAddress ).append( " - " ).append( getUser( request ) ).
-        append( " [" ).append( formatDate( response.getCalendar() ) ).
-        append( "] " ).append( "\"" ).append( request.getFirstLineofRequest() ).
-        append( "\" " ).append( response.getCode() ).append( " " ).
-        append( getContentLength( response ) ).append( "\n" );
+
+    messageBuilder.append( IPAddress ).
+        append( " - " ).
+        append( getUser( request ) ).
+        append( " [" ).
+        append( formatDate( response.getCalendar() ) ).
+        append( "] " ).
+        append( "\"" ).
+        append( request.getFirstLineofRequest() ).
+        append( "\" " ).
+        append( response.getCode() ).
+        append( " " ).
+        append( getContentLength( response ) ).
+        append( "\n" );
 
     return messageBuilder.toString();
 

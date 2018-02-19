@@ -11,6 +11,7 @@ public class ResponseFactory {
   }
 
   public Response getResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
+
     this.request = request;
     this.resource = resource;
     this.mimeTypes = mimeTypes;
@@ -28,6 +29,7 @@ public class ResponseFactory {
   }
 
   private Response checkIfResourceIsProtected(){
+
     if ( this.resource.isProtected() ) {
       this.htAccess = new Htaccess( this.resource.getHtAccessLocation() );
 
@@ -47,6 +49,7 @@ public class ResponseFactory {
   }
 
   private Response checkIfScriptResponse(){
+
     if ( !new File( resource.getAbsolutePath() ).exists() &&
         !this.request.getVerb().equals( "PUT" ) ) {
       return new NotFoundResponse( request, resource );
@@ -55,9 +58,11 @@ public class ResponseFactory {
     }
 
     return null;
+
   }
 
   private Response performVerbResponse(){
+
     switch ( this.request.getVerb() ) {
       case "GET":
         return new GetResponse( request, resource, mimeTypes );
@@ -72,14 +77,19 @@ public class ResponseFactory {
       default:
         return new ServerErrorResponse();
     }
+
   }
 
   public Response getServerErrorResponse(){
+
     return new ServerErrorResponse();
+
   }
 
   public Response getBadRequestResponse(){
+
     return new BadRequestResponse();
+
   }
 
 }

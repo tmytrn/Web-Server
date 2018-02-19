@@ -1,6 +1,7 @@
 import java.io.OutputStream;
 
 public class ForbiddenResponse extends Response{
+
   public ForbiddenResponse(Request request, Resource resource){
     super(request, resource);
     this.setCode(403);
@@ -10,6 +11,7 @@ public class ForbiddenResponse extends Response{
   @Override
   public void send( OutputStream out ) {
     String response = this.firstHeadersLine();
+
     try {
       out.write( response.getBytes() );
       out.flush();
@@ -18,4 +20,5 @@ public class ForbiddenResponse extends Response{
       e.printStackTrace();
     }
   }
+
 }

@@ -33,11 +33,13 @@ public class Worker implements Runnable {
       this.client.close();
     } catch ( Exception e ) {
       e.printStackTrace();
+      ResponseFactory responseFactory = new ResponseFactory();
+      Response badRequest = responseFactory.getServerErrorResponse();
 
       try {
-        throw new BadRequest( "Bad Request" );
-      } catch ( BadRequest badRequest ) {
-        badRequest.printStackTrace();
+        badRequest.send( this.client.getOutputStream() );
+      } catch ( IOException e1 ) {
+        e1.printStackTrace();
       }
 
     }
