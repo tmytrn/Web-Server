@@ -63,7 +63,7 @@ public class ScriptResponse extends Response {
       if ( this.output != null && this.output.length > 0 ) {
         out.write( this.output );
         out.flush();
-      } else if ( this.errorOutput != null && this.output.length > 0 ) {
+      } else if ( this.errorOutput != null && this.errorOutput.length > 0 ) {
         out.write( this.errorOutput );
         out.flush();
       }
@@ -111,8 +111,7 @@ public class ScriptResponse extends Response {
   private void processErrorOutput( Process process ) {
 
     try {
-      process.getErrorStream();
-      this.errorStream = process.getInputStream();
+      this.errorStream = process.getErrorStream();
       this.errorOutput = new byte[this.errorStream.available()];
       this.errorStream.read( this.errorOutput );
     } catch ( Exception e ) {
