@@ -6,7 +6,7 @@ public abstract class ConfigurationReader {
   private BufferedReader readFile;
   private String currentLine;
 
-  public ConfigurationReader(String fileName){
+  public ConfigurationReader( String fileName ) {
     this.file = new File( fileName );
 
     try {
@@ -23,23 +23,23 @@ public abstract class ConfigurationReader {
 
   }
 
-  public File getFile(){
+  public File getFile( ) {
     return this.file;
   }
 
-  public BufferedReader getReadFile(){
+  public BufferedReader getReadFile( ) {
     return this.readFile;
   }
 
-  public boolean hasMoreLines(){
+  public boolean hasMoreLines( ) {
     return this.currentLine != null;
   }
 
-  public String getCurrentLine(){
+  public String getCurrentLine( ) {
     return this.currentLine;
   }
 
-  public void setNextLine(){
+  public void setNextLine( ) {
     try {
       this.currentLine = this.readFile.readLine();
     } catch ( IOException e ) {
@@ -47,6 +47,6 @@ public abstract class ConfigurationReader {
     }
   }
 
-  public abstract void load();
+  public abstract void load( );
 
 }

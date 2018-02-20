@@ -1,37 +1,77 @@
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 public class WebServer {
 
-  public static void main( String[] args ) {
-    MimeTypes mimesFile = new MimeTypes( "conf/mime.types" );
-    mimesFile.load();
-    HttpdConf configuration = new HttpdConf( "conf/httpd.conf" );
-    //    //    configuration.load();
-    //    //    System.out.println(configuration.lookup("Listen"));
-    //    //    //System.out.println( mimesFile.lookup( "mp3" ) );
+  private static final String HTTPD_CONF_PATH = "conf/httpd.conf";
+  private static final String MIME_TYPES_PATH = "conf/mime.types";
+  private static final int DEFAULT_PORT = 8080;
 
-    Request getRequest = new Request( "GET / HTTP/1.1\n" +
-        "Transfer-Encoding: chunked\n" +
-        "Date: Sat, 28 Nov 2009 04:36:25 GMT\n" +
-        "Server: LiteSpeed\n" +
-        "Connection: close\n" +
-        "X-Powered-By: W3 Total Cache/0.8\n" +
-        "Pragma: public\n" +
-        "Expires: Sat, 28 Nov 2009 05:36:25 GMT\n" +
-        "Etag: \"pub1259380237;gz\"\n" +
-        "Cache-Control: max-age=3600, public\n" +
-        "Content-Type: text/html; charset=UTF-8\n" +
-        "Last-Modified: Sat, 28 Nov 2009 03:50:37 GMT\n" +
-        "X-Pingback: http://net.tutsplus.com/xmlrpc.php\n" +
-        "Content-Encoding: gzip\n" +
-        "Vary: Accept-Encoding, Cookie, User-Agent\n" );
+  private ServerSocket socket;
+  private HttpdConf configuration;
+  private MimeTypes mimeTypes;
 
-//    System.out.print( "methods\n" );
-//    System.out.print( "headers\n" );
-//    System.out.print("\r\n" );
-//    System.out.print( "body\n" );
-//    System.out.print("\r\n" );
+  public WebServer( ) {
 
+    this.configuration = new HttpdConf( HTTPD_CONF_PATH );
+    this.mimeTypes = new MimeTypes( MIME_TYPES_PATH );
+    this.loadConfigurationFiles();
 
   }
+
+  public void loadConfigurationFiles( ) {
+
+    this.configuration.load();
+    this.mimeTypes.load();
+
+  }
+
+  public void start( ) {
+
+    this.listenToPort();
+
+  }
+
+  public void listenToPort( ) {
+
+    Socket client = null;
+    int numberOfRequests = 0;
+
+    try {
+      this.socket = new ServerSocket( getPortNumber() );
+      while ( true ) {
+        client = this.socket.accept();
+        Worker worker = new Worker( client, this.configuration, this.mimeTypes );
+
+//        worker.run();
+
+        Thread thread = new Thread( worker, Integer.toString( ++numberOfRequests ) );
+        thread.start();
+
+      }
+
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+
+  }
+
+  private int getPortNumber( ) {
+
+    if ( this.configuration.lookupConfiguration( "Listen" ) != null ) {
+      return Integer.parseInt( this.configuration.lookupConfiguration( "Listen" ) );
+    }
+
+    return DEFAULT_PORT;
+
+  }
+
+  public static void main( String[] args ) {
+
+    WebServer webServer = new WebServer();
+    webServer.start();
+
+  }
+
 }
