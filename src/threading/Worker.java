@@ -2,6 +2,7 @@ package threading;
 
 import configurationreader.HttpdConf;
 import configurationreader.MimeTypes;
+import exception.BadRequest;
 import http.request.Request;
 import http.resource.Resource;
 import http.response.Response;
@@ -37,15 +38,28 @@ public class Worker implements Runnable {
       String IPAddress = this.client.getInetAddress().getLocalHost().getHostAddress();
       log.write( request, response, IPAddress );
       this.client.close();
-    } catch ( Exception e ) {
+    } catch ( IOException e ) {
+
       e.printStackTrace();
       ResponseFactory responseFactory = new ResponseFactory();
-      Response badRequest = responseFactory.getServerErrorResponse();
+      Response serverErrorResponse = responseFactory.getServerErrorResponse();
 
       try {
-        badRequest.send( this.client.getOutputStream() );
+        serverErrorResponse.send( this.client.getOutputStream() );
       } catch ( IOException e1 ) {
         e1.printStackTrace();
+      }
+
+    } catch( BadRequest badRequest){
+
+      badRequest.printStackTrace();
+      ResponseFactory responseFactory = new ResponseFactory();
+      Response badRequestResponse = responseFactory.getServerErrorResponse();
+
+      try {
+        badRequestResponse.send( this.client.getOutputStream() );
+      } catch ( IOException e ) {
+        e.printStackTrace();
       }
 
     }
