@@ -8,7 +8,8 @@ public class PutResponse extends Response {
 
     super( request, resource );
     File filePath = new File( resource.absolutePath() );
-    createResource( filePath );
+    this.createResource( filePath );
+    this.addContentLocationHeader();
 
   }
 
@@ -26,7 +27,9 @@ public class PutResponse extends Response {
   }
 
   public void createResource( File createFile ) {
+
     createFile.getParentFile().mkdirs();
+
     try {
       createFile.createNewFile();
       FileOutputStream fileOutputStream = new FileOutputStream( createFile );
@@ -39,6 +42,14 @@ public class PutResponse extends Response {
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+
+  }
+
+  private void addContentLocationHeader( ) {
+
+    String absolutePath = this.getResource().getAbsolutePath();
+    String[] pathSplit = absolutePath.split( "/" );
+    this.getResponseHeaders().put( "Content-Location", "/" + pathSplit[pathSplit.length - 1] );
 
   }
 
