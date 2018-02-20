@@ -148,4 +148,9 @@ public class Resource {
 
   }
 
+  public String getFileURI(){
+
+    return this.fileURI;
+  }
+
 }

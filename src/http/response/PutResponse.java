@@ -52,9 +52,7 @@ public class PutResponse extends Response {
 
   private void addContentLocationHeader( ) {
 
-    String absolutePath = this.getResource().getAbsolutePath();
-    String[] pathSplit = absolutePath.split( "/" );
-    this.getResponseHeaders().put( "Content-Location", "/" + pathSplit[pathSplit.length - 1] );
+    this.getResponseHeaders().put( "Content-Location", this.getResource().getFileURI() );
 
   }
 
