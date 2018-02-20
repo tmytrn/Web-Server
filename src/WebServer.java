@@ -1,7 +1,9 @@
 import configurationreader.HttpdConf;
 import configurationreader.MimeTypes;
+import http.response.ResponseFactory;
 import threading.Worker;
 
+import java.io.IOException;
 import java.net.*;
 
 public class WebServer {
@@ -31,11 +33,15 @@ public class WebServer {
 
   public void start( ) {
 
-    this.listenToPort();
+    try {
+      this.listenToPort();
+    } catch ( IOException e ) {
+      e.printStackTrace();
+    }
 
   }
 
-  public void listenToPort( ) {
+  public void listenToPort( ) throws IOException {
 
     Socket client = null;
     int numberOfRequests = 0;
@@ -50,8 +56,10 @@ public class WebServer {
 
       }
 
-    } catch ( Exception e ) {
+    } catch ( IOException e ) {
       e.printStackTrace();
+      ResponseFactory responseFactory = new ResponseFactory();
+      responseFactory.getServerErrorResponse().send( client.getOutputStream() );
     }
 
   }

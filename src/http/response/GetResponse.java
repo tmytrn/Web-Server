@@ -14,12 +14,14 @@ public class GetResponse extends Response {
   private MimeTypes mimeTypes;
 
   public GetResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
+
     super( request, resource );
     this.mimeTypes = mimeTypes;
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
     this.putResourceHeaders();
     this.changeResponseIfResourceCached();
+
   }
 
   private void changeResponseIfResourceCached( ) {

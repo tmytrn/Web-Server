@@ -16,6 +16,7 @@ public class Logger {
   private BufferedWriter bufferedWriter;
 
   public Logger( String fileName ) {
+
     this.logFile = new File( fileName );
 
     if ( !this.logFile.exists() ) {
