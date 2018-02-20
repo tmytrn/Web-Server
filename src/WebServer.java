@@ -43,9 +43,6 @@ public class WebServer {
       while ( true ) {
         client = this.socket.accept();
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
-
-//        worker.run();
-
         Thread thread = new Thread( worker, Integer.toString( ++numberOfRequests ) );
         thread.start();
 

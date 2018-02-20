@@ -13,10 +13,10 @@ public class GetResponse extends Response {
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
     this.putResourceHeaders();
-    this.changeResponseIfResourcedCached();
+    this.changeResponseIfResourceCached();
   }
 
-  private void changeResponseIfResourcedCached( ) {
+  private void changeResponseIfResourceCached( ) {
 
     if ( this.getRequest().getHeaders().containsKey( "If-Modified-Since" ) ) {
       Date currentModifiedDate = this.getResource().getLastModifiedDate();
