@@ -1,6 +1,8 @@
-import java.io.*;
+import configurationreader.HttpdConf;
+import configurationreader.MimeTypes;
+import threading.Worker;
+
 import java.net.*;
-import java.util.*;
 
 public class WebServer {
 

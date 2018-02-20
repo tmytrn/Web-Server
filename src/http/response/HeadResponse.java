@@ -1,3 +1,9 @@
+package http.response;
+
+import configurationreader.MimeTypes;
+import http.request.Request;
+import http.resource.Resource;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 
