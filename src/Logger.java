@@ -5,62 +5,89 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Logger {
+
   private File logFile;
   private FileWriter fileWriter;
   private BufferedWriter bufferedWriter;
 
+  public Logger( String fileName ) {
+    this.logFile = new File( fileName );
 
-  public Logger(String fileName){
-    logFile = new File(fileName);
-    if(!logFile.exists()){
-      logFile.getParentFile().mkdir();
-      try{
-        logFile.createNewFile();
-      }catch(Exception e){
-        //500
-      }
-    }
-  }
-  public void write(Request request, Response response, String IPAddress){
+    if ( !this.logFile.exists() ) {
+      this.logFile.getParentFile().mkdir();
+
       try {
-        fileWriter = new FileWriter( logFile , true);
-        bufferedWriter = new BufferedWriter( fileWriter );
-        String message = getLogMessage(request, response, IPAddress);
-        bufferedWriter.append( message );
-        bufferedWriter.close();
+        this.logFile.createNewFile();
+      } catch ( Exception e ) {
+        e.printStackTrace();
       }
-      catch(Exception e){
 
-      }
+    }
 
   }
-  private String getLogMessage(Request request, Response response, String IPAddress){
-    StringBuilder messageBuilder = new StringBuilder(  );
-    messageBuilder.append( IPAddress );
-    messageBuilder.append(" - ");
-    messageBuilder.append(getUser(request));
-    messageBuilder.append( " [" + formatDate(response.getCalendar()) + "] " );
-    messageBuilder.append( "\"" +request.getFirstLineofRequest()+ "\" ");
-    messageBuilder.append(response.getCode() + " ");
-    messageBuilder.append(getContentLength(response) + "\n");
+
+  public void write( Request request, Response response, String IPAddress ) {
+
+    try {
+      this.fileWriter = new FileWriter( this.logFile, true );
+      this.bufferedWriter = new BufferedWriter( this.fileWriter );
+      String message = getLogMessage( request, response, IPAddress );
+      this.bufferedWriter.append( message );
+      this.bufferedWriter.close();
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+
+  }
+
+  private String getLogMessage( Request request, Response response, String IPAddress ) {
+
+    StringBuilder messageBuilder = new StringBuilder();
+
+    messageBuilder.append( IPAddress ).
+        append( " - " ).
+        append( getUser( request ) ).
+        append( " [" ).
+        append( formatDate( response.getCalendar() ) ).
+        append( "] " ).
+        append( "\"" ).
+        append( request.getFirstLineofRequest() ).
+        append( "\" " ).
+        append( response.getCode() ).
+        append( " " ).
+        append( getContentLength( response ) ).
+        append( "\n" );
+
     return messageBuilder.toString();
+
   }
-  private String formatDate(Calendar calendar){
+
+  private String formatDate( Calendar calendar ) {
+
     SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MMM/yyyy:HH:mm:ss Z" );
+
     return dateFormat.format( calendar.getTime() );
+
   }
-  private String getUser(Request request){
-    if(request.lookup( "Authorization: " ) != null){
+
+  private String getUser( Request request ) {
+
+    if ( request.lookup( "Authorization: " ) != null ) {
       return request.lookup( "Authorization: " );
     }
+
     return "-";
+
   }
-  private String getContentLength(Response response){
-    if( response.getContentLength() > 0){
-      return  Integer.toString(response.getContentLength());
+
+  private String getContentLength( Response response ) {
+
+    if ( response.getContentLength() > 0 ) {
+      return Integer.toString( response.getContentLength() );
     }
-    else{
-      return "-";
-    }
+
+    return "-";
+
   }
+
 }

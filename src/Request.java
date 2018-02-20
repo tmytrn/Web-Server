@@ -29,108 +29,98 @@ public class Request {
     }
   };
 
-  public Request( String test ) {
-    this.headers = new HashMap<>();
-
-    StringTokenizer tokenizer = new StringTokenizer( test, "\n" );
-    String currentLine;
-    String[] currentLineSplit;
-
-    while ( tokenizer.hasMoreTokens() ) {
-      currentLine = tokenizer.nextToken();
-      currentLineSplit = currentLine.split( " " );
-
-      if ( isFirstLineOfRequest( currentLineSplit ) ) {
-        this.setFirstLineOfRequest( currentLineSplit[0], currentLineSplit[1], currentLineSplit[2] );
-      } else if ( currentLine.contains( ": " ) ) {
-        this.parseHeader( currentLine );
-      }
-
-    }
-  }
-
   public Request( InputStream client ) throws BadRequest {
+
     this.headers = new HashMap<>();
     this.inputStream = client;
     this.inputStreamReader = new BufferedReader( new InputStreamReader( this.inputStream ) );
-    try{
-      this.parseRequest();
-    } catch ( Exception e ){
-      e.printStackTrace();
-      throw new BadRequest( "Bad Request" );
-    }
-  }
 
-  private void parseRequest( ) throws BadRequest {
     try {
-      this.parseFirstLine();
-      this.parseHeaderSection();
-
-      if ( this.headers.containsKey( "Content-Length" ) &&
-          ( this.verb.equals( "PUT" ) || this.verb.equals( "POST" ) ) ) {
-        this.parseBodySection();
-      }
-
+      this.parseRequest();
     } catch ( Exception e ) {
       e.printStackTrace();
       throw new BadRequest( "Bad Request" );
     }
+
+  }
+
+  private void parseRequest( ) throws BadRequest, IOException {
+
+    this.parseFirstLine();
+    this.parseHeaderSection();
+
+    if ( this.headers.containsKey( "Content-Length" ) &&
+        ( this.verb.equals( "PUT" ) || this.verb.equals( "POST" ) ) ) {
+      this.parseBodySection();
+    }
+
   }
 
 
   private void parseFirstLine( ) throws IOException, BadRequest {
+
     String[] lineSplit = this.inputStreamReader.readLine().split( " " );
+
     if ( isFirstLineOfRequest( lineSplit ) ) {
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
-    }else{
+    } else {
       throw new BadRequest( "Bad Request" );
     }
+
   }
 
   private boolean isValidHTTPVerb( String verbToCheck ) {
+
     return VALID_HTTP_VERBS.containsKey( verbToCheck );
+
   }
 
   private boolean isValidHTTPVersion( String httpVersion ) {
+
     return VALID_HTTP_VERSIONS.containsKey( httpVersion );
+
   }
 
   private boolean isFirstLineOfRequest( String[] firstLineOfRequest ) {
+
     return firstLineOfRequest.length == 3 &&
         isValidHTTPVerb( firstLineOfRequest[0] ) &&
         isValidHTTPVersion( firstLineOfRequest[2] );
+
   }
 
   private void setFirstLineOfRequest( String verb, String uri, String httpVersion ) {
+
     this.verb = verb;
-    if(hasQueryString( uri )){
+
+    if ( hasQueryString( uri ) ) {
       parseQueryString( uri );
-    }else {
+    } else {
       this.uri = uri;
     }
     this.httpVersion = httpVersion;
-    System.out.println( "verb is: " + this.verb );
-    System.out.println( "uri is: " + this.uri );
-    System.out.println( "httpVersion is: " + this.httpVersion );
   }
 
   private void parseHeaderSection( ) throws IOException {
+
     String lineRead;
     while ( this.inputStreamReader.ready() ) {
       lineRead = this.inputStreamReader.readLine();
       if ( lineRead.contains( ": " ) ) {
         this.parseHeader( lineRead );
       } else if ( lineRead.isEmpty() || lineRead.equals( "\r\n" ) ) {
-        break;
+        return;
       }
     }
+
   }
 
   private void parseHeader( String header ) {
+
     String[] currentHeader = header.split( ": " );
 
     this.headers.put( currentHeader[0], currentHeader[1] );
-    System.out.println( "header: " + currentHeader[0] + " :  " + currentHeader[1] );
+
   }
 
   private void parseBodySection( ) {
@@ -139,8 +129,8 @@ public class Request {
 
     try {
 
-      for(int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++){
-        this.body[bodyIndex] = (byte) this.inputStreamReader.read();
+      for ( int bodyIndex = 0; bodyIndex < contentLength; bodyIndex++ ) {
+        this.body[bodyIndex] = ( byte ) this.inputStreamReader.read();
 
       }
 
@@ -149,44 +139,67 @@ public class Request {
     }
   }
 
-  private boolean hasQueryString(String uri){
-    String [] uriDissect = uri.split( "\\?" );
-    return (uriDissect.length > 1);
+  private boolean hasQueryString( String uri ) {
+
+    String[] uriDissect = uri.split( "\\?" );
+    return ( uriDissect.length > 1 );
+
   }
-  private void parseQueryString(String uri){
-    String [] query = uri.split( "\\?" );
+
+  private void parseQueryString( String uri ) {
+
+    String[] query = uri.split( "\\?" );
     this.queryString = query[1];
     this.uri = query[0];
+
   }
-  public String getFirstLineofRequest(){
-    return this.verb + " " +  this.uri + " " + this.httpVersion;
+
+  public String getFirstLineofRequest( ) {
+
+    return this.verb + " " + this.uri + " " + this.httpVersion;
+
   }
-  public String getQueryString(){
+
+  public String getQueryString( ) {
+
     return this.queryString;
+
   }
 
   public String getUri( ) {
+
     return this.uri;
+
   }
 
   public byte[] getBody( ) {
+
     return this.body;
+
   }
 
   public String getVerb( ) {
+
     return this.verb;
+
   }
 
   public String getHttpVersion( ) {
+
     return this.httpVersion;
+
   }
 
   public String lookup( String header ) {
+
     return this.headers.get( header );
+
   }
 
-  public HashMap<String, String> getHeaders() {
-    return headers;
+  public HashMap<String, String> getHeaders( ) {
+
+    return this.headers;
+
   }
 
 }

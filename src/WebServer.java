@@ -4,50 +4,74 @@ import java.util.*;
 
 public class WebServer {
 
-  private static final String HTTPDCONFPATH = "conf/httpd.conf";
-  private static final String MIMETYPESPATH = "conf/mime.types";
+  private static final String HTTPD_CONF_PATH = "conf/httpd.conf";
+  private static final String MIME_TYPES_PATH = "conf/mime.types";
+  private static final int DEFAULT_PORT = 8080;
 
   private ServerSocket socket;
   private HttpdConf configuration;
   private MimeTypes mimeTypes;
 
   public WebServer( ) {
-    this.configuration = new HttpdConf( HTTPDCONFPATH );
-    this.mimeTypes = new MimeTypes( MIMETYPESPATH );
+
+    this.configuration = new HttpdConf( HTTPD_CONF_PATH );
+    this.mimeTypes = new MimeTypes( MIME_TYPES_PATH );
     this.loadConfigurationFiles();
-    this.listenToPort();
+
   }
 
   public void loadConfigurationFiles( ) {
+
     this.configuration.load();
     this.mimeTypes.load();
+
+  }
+
+  public void start( ) {
+
+    this.listenToPort();
+
   }
 
   public void listenToPort( ) {
+
     Socket client = null;
     int numberOfRequests = 0;
-    int portNumber = Integer.parseInt( this.configuration.lookupConfiguration( "Listen" ) );
 
     try {
-      this.socket = new ServerSocket( portNumber );
+      this.socket = new ServerSocket( getPortNumber() );
       while ( true ) {
         client = this.socket.accept();
-        System.out.println( "Request Number is: " + ++numberOfRequests );
         Worker worker = new Worker( client, this.configuration, this.mimeTypes );
-        worker.run();
-//       Thread thread = new Thread( worker, Integer.toString( numberOfRequests ) );
-//       thread.start();
+
+//        worker.run();
+
+        Thread thread = new Thread( worker, Integer.toString( ++numberOfRequests ) );
+        thread.start();
+
       }
 
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+
+  }
+
+  private int getPortNumber( ) {
+
+    if ( this.configuration.lookupConfiguration( "Listen" ) != null ) {
+      return Integer.parseInt( this.configuration.lookupConfiguration( "Listen" ) );
+    }
+
+    return DEFAULT_PORT;
+
   }
 
   public static void main( String[] args ) {
+
     WebServer webServer = new WebServer();
-//    Htaccess htaccess = new Htaccess( "/Users/niszeto/IdeaProjects/web-server-lookin-like-a-snack/src/public_html/.htaccess" );
-//    System.out.println( htaccess.isAuthorized( "YWxhZGRpbjpvcGVuc2VzYW1l" ) );
+    webServer.start();
 
   }
+
 }
