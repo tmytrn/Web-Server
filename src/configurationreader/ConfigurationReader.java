@@ -1,3 +1,5 @@
+package configurationreader;
+
 import java.io.*;
 
 public abstract class ConfigurationReader {

@@ -1,3 +1,10 @@
+package http.response;
+
+import configurationreader.Htaccess;
+import configurationreader.MimeTypes;
+import http.request.Request;
+import http.resource.Resource;
+
 import java.io.File;
 
 public class ResponseFactory {

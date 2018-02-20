@@ -1,3 +1,7 @@
+package http.request;
+
+import exception.BadRequest;
+
 import java.io.*;
 import java.util.*;
 
@@ -39,7 +43,7 @@ public class Request {
       this.parseRequest();
     } catch ( Exception e ) {
       e.printStackTrace();
-      throw new BadRequest( "Bad Request" );
+      throw new BadRequest( "Bad http.request.Request" );
     }
 
   }
@@ -64,7 +68,7 @@ public class Request {
     if ( isFirstLineOfRequest( lineSplit ) ) {
       this.setFirstLineOfRequest( lineSplit[0], lineSplit[1], lineSplit[2] );
     } else {
-      throw new BadRequest( "Bad Request" );
+      throw new BadRequest( "Bad http.request.Request" );
     }
 
   }

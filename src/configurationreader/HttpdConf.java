@@ -1,3 +1,5 @@
+package configurationreader;
+
 import java.util.*;
 
 public class HttpdConf extends ConfigurationReader {

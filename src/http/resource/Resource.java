@@ -1,3 +1,7 @@
+package http.resource;
+
+import configurationreader.HttpdConf;
+
 import java.io.*;
 import java.util.*;
 

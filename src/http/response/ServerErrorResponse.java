@@ -1,13 +1,19 @@
+package http.response;
+
 import java.io.OutputStream;
 
-public class BadRequestResponse extends Response {
-  public BadRequestResponse( ) {
+public class ServerErrorResponse extends Response {
+
+  public ServerErrorResponse( ) {
+
     super();
-    this.setCode( 400 );
-    this.setReasonPhrase( "Bad Request" );
+    this.setCode( 500 );
+    this.setReasonPhrase( "Internal Server Error" );
+
   }
 
   public void send( OutputStream out ) {
+
     String response = this.createDefaultHeaders();
 
     try {
@@ -17,11 +23,12 @@ public class BadRequestResponse extends Response {
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+
   }
 
   public String createDefaultHeaders( ) {
-    StringBuilder headers = new StringBuilder();
 
+    StringBuilder headers = new StringBuilder();
     headers.append( this.getCode() ).
         append( " " ).
         append( this.getReasonPhrase() ).

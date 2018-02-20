@@ -1,3 +1,7 @@
+package http.response;
+
+import http.request.Request;
+import http.resource.Resource;
 
 import java.io.InputStream;
 import java.io.OutputStream;

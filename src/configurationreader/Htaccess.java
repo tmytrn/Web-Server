@@ -1,4 +1,5 @@
-import java.io.*;
+package configurationreader;
+
 import java.util.*;
 
 public class Htaccess extends ConfigurationReader {

@@ -1,3 +1,8 @@
+package logger;
+
+import http.request.Request;
+import http.response.Response;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

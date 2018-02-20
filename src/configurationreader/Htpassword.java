@@ -1,9 +1,9 @@
+package configurationreader;
+
 import java.util.HashMap;
 import java.util.Base64;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-
-import java.io.IOException;
 
 public class Htpassword extends ConfigurationReader {
   private HashMap<String, String> passwords;
