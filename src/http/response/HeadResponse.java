@@ -5,7 +5,9 @@ import http.request.Request;
 import http.resource.Resource;
 
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HeadResponse extends Response {
 
@@ -17,6 +19,30 @@ public class HeadResponse extends Response {
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
     this.putResourceHeaders();
+    this.changeResponseIfResourceCached();
+  }
+
+  private void changeResponseIfResourceCached( ) {
+
+    if ( this.getRequest().getHeaders().containsKey( "If-Modified-Since" ) ) {
+
+      Date currentModifiedDate = this.getResource().getLastModifiedDate();
+      SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
+
+      try {
+        Date headerModifiedDate = simpleDateFormat.parse( this.getRequest().getHeaders().get( "If-Modified-Since" ) );
+
+        if ( !currentModifiedDate.after( headerModifiedDate ) ) {
+          this.setCode( 304 );
+          this.setReasonPhrase( "Not Modified" );
+        }
+
+      } catch ( ParseException e ) {
+        e.printStackTrace();
+      }
+
+    }
+
   }
 
   public void send( OutputStream out ) {

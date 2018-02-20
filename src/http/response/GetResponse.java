@@ -92,6 +92,7 @@ public class GetResponse extends Response {
       }
 
       out.close();
+
     } catch ( Exception e ) {
       e.printStackTrace();
     }
