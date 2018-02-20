@@ -8,7 +8,7 @@ public class GetResponse extends Response {
   private MimeTypes mimeTypes;
 
   public GetResponse( Request request, Resource resource, MimeTypes mimeTypes ) {
-    super( request, resource);
+    super( request, resource );
     this.mimeTypes = mimeTypes;
     this.setCode( 200 );
     this.setReasonPhrase( "OK" );
@@ -16,16 +16,16 @@ public class GetResponse extends Response {
     this.changeResponseIfResourcedCached();
   }
 
-  private void changeResponseIfResourcedCached(){
+  private void changeResponseIfResourcedCached( ) {
 
-    if(this.getRequest().getHeaders().containsKey( "If-Modified-Since" )){
+    if ( this.getRequest().getHeaders().containsKey( "If-Modified-Since" ) ) {
       Date currentModifiedDate = this.getResource().getLastModifiedDate();
       SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss " );
 
       try {
         Date headerModifiedDate = simpleDateFormat.parse( this.getRequest().getHeaders().get( "If-Modified-Since" ) );
 
-        if(!currentModifiedDate.after( headerModifiedDate )){
+        if ( !currentModifiedDate.after( headerModifiedDate ) ) {
           this.setCode( 304 );
           this.setReasonPhrase( "Not Modified" );
         }
@@ -41,9 +41,9 @@ public class GetResponse extends Response {
   private void putResourceHeaders( ) {
 
     File content = this.getResource().getFile();
-    setContentLength( (int)content.length() );
+    setContentLength( ( int ) content.length() );
 
-    if(content != null) {
+    if ( content != null ) {
       this.getResponseHeaders().put( "Last-Modified", getLastModifiedDate( content ) );
       this.getResponseHeaders().put( "Content-Length", String.valueOf( content.length() ) );
       this.getResponseHeaders().put( "Content-Type", getMimeType( content ) + "; charset=utf-8" );
@@ -51,7 +51,7 @@ public class GetResponse extends Response {
 
   }
 
-  private String getLastModifiedDate(File file){
+  private String getLastModifiedDate( File file ) {
 
     SimpleDateFormat fileDateFormat = new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss z" );
 
@@ -63,7 +63,7 @@ public class GetResponse extends Response {
     String fileName = file.getName();
     String[] type = fileName.split( "\\." );
 
-    if( this.mimeTypes.lookup( type[type.length - 1] ) != null) {
+    if ( this.mimeTypes.lookup( type[type.length - 1] ) != null ) {
       return this.mimeTypes.lookup( type[type.length - 1] );
     }
 
@@ -78,7 +78,7 @@ public class GetResponse extends Response {
       out.write( response.getBytes() );
       out.flush();
 
-      if(this.getCode() == 200){
+      if ( this.getCode() == 200 ) {
         sendResource( out );
         out.flush();
       }

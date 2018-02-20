@@ -1,10 +1,10 @@
 import java.io.OutputStream;
 
 public class BadRequestResponse extends Response {
-  public BadRequestResponse(){
+  public BadRequestResponse( ) {
     super();
-    this.setCode(400);
-    this.setReasonPhrase("Bad Request");
+    this.setCode( 400 );
+    this.setReasonPhrase( "Bad Request" );
   }
 
   public void send( OutputStream out ) {
@@ -19,7 +19,7 @@ public class BadRequestResponse extends Response {
     }
   }
 
-  public String createDefaultHeaders(){
+  public String createDefaultHeaders( ) {
     StringBuilder headers = new StringBuilder();
 
     headers.append( this.getCode() ).

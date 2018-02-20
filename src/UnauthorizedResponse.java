@@ -1,11 +1,11 @@
 import java.io.OutputStream;
 
-public class UnauthorizedResponse extends Response{
+public class UnauthorizedResponse extends Response {
 
-  public UnauthorizedResponse(Request request, Resource resource){
+  public UnauthorizedResponse( Request request, Resource resource ) {
 
-    super(request, resource);
-    this.setCode(401);
+    super( request, resource );
+    this.setCode( 401 );
     this.setReasonPhrase( "Unauthorized" );
 
   }
@@ -23,7 +23,7 @@ public class UnauthorizedResponse extends Response{
 
   }
 
-  private String getWWWResponseHeader(){
+  private String getWWWResponseHeader( ) {
 
     return "WWW-Authenticate: Basic";
 

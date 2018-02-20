@@ -27,7 +27,7 @@ public class WebServer {
 
   }
 
-  public void start(){
+  public void start( ) {
 
     this.listenToPort();
 
@@ -46,8 +46,8 @@ public class WebServer {
 
 //        worker.run();
 
-       Thread thread = new Thread( worker, Integer.toString( ++numberOfRequests ) );
-       thread.start();
+        Thread thread = new Thread( worker, Integer.toString( ++numberOfRequests ) );
+        thread.start();
 
       }
 
@@ -57,9 +57,9 @@ public class WebServer {
 
   }
 
-  private int getPortNumber(){
+  private int getPortNumber( ) {
 
-    if(this.configuration.lookupConfiguration( "Listen" ) != null){
+    if ( this.configuration.lookupConfiguration( "Listen" ) != null ) {
       return Integer.parseInt( this.configuration.lookupConfiguration( "Listen" ) );
     }
 

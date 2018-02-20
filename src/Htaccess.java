@@ -27,7 +27,7 @@ public class Htaccess extends ConfigurationReader {
 
   }
 
-  public void parseHtAccessFile(){
+  public void parseHtAccessFile( ) {
 
     String htAccessLine;
     String[] htAccessLineSplit;
@@ -35,10 +35,10 @@ public class Htaccess extends ConfigurationReader {
     while ( this.hasMoreLines() ) {
       htAccessLine = this.getCurrentLine();
 
-      if(htAccessLine.contains( "\"" )){
-        htAccessLine = htAccessLine.replaceAll( "\"","" );
-        htAccessLineSplit = htAccessLine.split( " ",2 );
-      }else{
+      if ( htAccessLine.contains( "\"" ) ) {
+        htAccessLine = htAccessLine.replaceAll( "\"", "" );
+        htAccessLineSplit = htAccessLine.split( " ", 2 );
+      } else {
         htAccessLineSplit = htAccessLine.split( " " );
       }
 
@@ -48,7 +48,7 @@ public class Htaccess extends ConfigurationReader {
 
   }
 
-  public boolean isAuthorized(String authorizationInformation){
+  public boolean isAuthorized( String authorizationInformation ) {
 
     return this.userFile.isAuthorized( authorizationInformation );
 

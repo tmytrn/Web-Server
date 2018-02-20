@@ -1,16 +1,15 @@
 import java.io.OutputStream;
 
-public class ForbiddenResponse extends Response{
+public class ForbiddenResponse extends Response {
 
-  public ForbiddenResponse(Request request, Resource resource){
+  public ForbiddenResponse( Request request, Resource resource ) {
 
-    super(request, resource);
-    this.setCode(403);
+    super( request, resource );
+    this.setCode( 403 );
     this.setReasonPhrase( "Forbidden" );
 
   }
 
-  @Override
   public void send( OutputStream out ) {
 
     String response = this.firstHeadersLine();

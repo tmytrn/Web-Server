@@ -4,11 +4,11 @@ import java.io.OutputStream;
 
 public class PutResponse extends Response {
 
-  public PutResponse(Request request, Resource resource){
+  public PutResponse( Request request, Resource resource ) {
 
-    super(request, resource);
-    File filePath = new File(resource.absolutePath());
-    createResource(filePath);
+    super( request, resource );
+    File filePath = new File( resource.absolutePath() );
+    createResource( filePath );
 
   }
 
@@ -25,20 +25,20 @@ public class PutResponse extends Response {
 
   }
 
-  public void createResource(File createFile){
-      createFile.getParentFile().mkdirs();
-      try {
-        createFile.createNewFile();
-        FileOutputStream fileOutputStream = new FileOutputStream( createFile );
-        fileOutputStream.write( this.getRequestBody() );
-        fileOutputStream.flush();
-        fileOutputStream.close();
-        this.setCode(201);
-        this.setReasonPhrase("Created");
+  public void createResource( File createFile ) {
+    createFile.getParentFile().mkdirs();
+    try {
+      createFile.createNewFile();
+      FileOutputStream fileOutputStream = new FileOutputStream( createFile );
+      fileOutputStream.write( this.getRequestBody() );
+      fileOutputStream.flush();
+      fileOutputStream.close();
+      this.setCode( 201 );
+      this.setReasonPhrase( "Created" );
 
-      }catch(Exception e){
-        e.printStackTrace();
-      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
 
   }
 

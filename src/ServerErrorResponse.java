@@ -2,7 +2,7 @@ import java.io.OutputStream;
 
 public class ServerErrorResponse extends Response {
 
-  public ServerErrorResponse() {
+  public ServerErrorResponse( ) {
 
     super();
     this.setCode( 500 );
@@ -24,7 +24,7 @@ public class ServerErrorResponse extends Response {
 
   }
 
-  public String createDefaultHeaders(){
+  public String createDefaultHeaders( ) {
 
     StringBuilder headers = new StringBuilder();
     headers.append( this.getCode() ).

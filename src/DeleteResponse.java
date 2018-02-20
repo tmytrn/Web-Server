@@ -5,7 +5,7 @@ public class DeleteResponse extends Response {
 
   public DeleteResponse( Request request, Resource resource ) {
     super( request, resource );
-    File fileToDelete = new File(resource.getAbsolutePath());
+    File fileToDelete = new File( resource.getAbsolutePath() );
     deleteFile( fileToDelete );
   }
 
