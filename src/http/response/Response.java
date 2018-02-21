@@ -37,7 +37,7 @@ public abstract class Response {
   public void putDefaultHeaders( ) {
 
     this.responseHeaders.put( "Date", getDate() );
-    this.responseHeaders.put( "Server", "web-server-lookin-like-a-snack" );
+    this.responseHeaders.put( "Server", "Szeto,Nicholas & Tran,Tommy web-server-lookin-like-a-snack" );
 
   }
 
