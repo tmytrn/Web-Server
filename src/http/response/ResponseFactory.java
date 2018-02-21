@@ -54,6 +54,7 @@ public class ResponseFactory {
     }
 
     return null;
+
   }
 
   private Response checkIfScriptResponse( ) {

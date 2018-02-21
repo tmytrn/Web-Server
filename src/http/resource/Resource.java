@@ -82,7 +82,13 @@ public class Resource {
 
   public boolean isProtected( ) {
 
-    this.htAccessLocation = this.getURIDirectoryTree() + "/.htaccess";
+    String AccessFileName = ".htaccess";
+
+    if(this.configuration.getConfiguration().containsKey( "AccessFileName" )){
+      AccessFileName = this.configuration.lookupConfiguration( "AccessFileName" );
+    }
+
+    this.htAccessLocation = this.getURIDirectoryTree() + "/" + AccessFileName;
     File htAccess = new File( this.htAccessLocation );
 
     return htAccess.exists();
